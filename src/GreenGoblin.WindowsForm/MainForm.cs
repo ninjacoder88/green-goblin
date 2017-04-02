@@ -56,5 +56,18 @@ namespace GreenGoblin.WindowsForm
         }
 
         private readonly GreenGoblinViewModel _viewModel;
+
+        private void dgvTimeEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var dgv = sender as DataGridView;
+            var row = dgv.Rows[e.RowIndex];
+            var model = row.DataBoundItem as TimeEntryModel;
+
+            using (var form = new EditEntryForm(model))
+            {
+                var dialogResult = form.ShowDialog();
+
+            }
+        }
     }
 }

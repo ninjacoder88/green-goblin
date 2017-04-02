@@ -34,9 +34,13 @@
             this.btnStart = new System.Windows.Forms.Button();
             this.btnBreak = new System.Windows.Forms.Button();
             this.btnLunch = new System.Windows.Forms.Button();
-            this.timeEntryModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.btnEnd = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblTaskTime = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.startTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.endTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -45,10 +49,10 @@
             this.durationTimeSpanDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.endDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.startDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lblTaskTime = new System.Windows.Forms.Label();
+            this.timeEntryModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // txtDescription
@@ -82,6 +86,7 @@
             this.dgvTimeEntries.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvTimeEntries.Size = new System.Drawing.Size(629, 511);
             this.dgvTimeEntries.TabIndex = 1;
+            this.dgvTimeEntries.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTimeEntries_CellDoubleClick);
             this.dgvTimeEntries.SelectionChanged += new System.EventHandler(this.dgvTimeEntries_SelectionChanged);
             // 
             // btnStart
@@ -126,10 +131,6 @@
             this.btnLunch.UseVisualStyleBackColor = false;
             this.btnLunch.Click += new System.EventHandler(this.btnLunch_Click);
             // 
-            // timeEntryModelBindingSource
-            // 
-            this.timeEntryModelBindingSource.DataSource = typeof(GreenGoblin.WindowsForm.TimeEntryModel);
-            // 
             // btnEnd
             // 
             this.btnEnd.BackColor = System.Drawing.Color.LightGreen;
@@ -157,6 +158,67 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Task Management";
+            // 
+            // lblTaskTime
+            // 
+            this.lblTaskTime.AutoSize = true;
+            this.lblTaskTime.Location = new System.Drawing.Point(52, 135);
+            this.lblTaskTime.Name = "lblTaskTime";
+            this.lblTaskTime.Size = new System.Drawing.Size(31, 15);
+            this.lblTaskTime.TabIndex = 7;
+            this.lblTaskTime.Text = "0:00";
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.LightGreen;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.ForeColor = System.Drawing.Color.DarkGreen;
+            this.button1.Location = new System.Drawing.Point(653, 294);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(122, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Remove Entry";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.LightGreen;
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.ForeColor = System.Drawing.Color.DarkGreen;
+            this.button2.Location = new System.Drawing.Point(653, 323);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(122, 23);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "Reconcile";
+            this.button2.UseVisualStyleBackColor = false;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.LightGreen;
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.ForeColor = System.Drawing.Color.DarkGreen;
+            this.button3.Location = new System.Drawing.Point(653, 413);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(122, 23);
+            this.button3.TabIndex = 9;
+            this.button3.Text = "Refresh";
+            this.button3.UseVisualStyleBackColor = false;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.LightGreen;
+            this.button4.FlatAppearance.BorderSize = 0;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.ForeColor = System.Drawing.Color.DarkGreen;
+            this.button4.Location = new System.Drawing.Point(653, 442);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(122, 23);
+            this.button4.TabIndex = 10;
+            this.button4.Text = "Save";
+            this.button4.UseVisualStyleBackColor = false;
             // 
             // startTimeDataGridViewTextBoxColumn
             // 
@@ -217,14 +279,9 @@
             this.startDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
             this.startDateTimeDataGridViewTextBoxColumn.Visible = false;
             // 
-            // lblTaskTime
+            // timeEntryModelBindingSource
             // 
-            this.lblTaskTime.AutoSize = true;
-            this.lblTaskTime.Location = new System.Drawing.Point(52, 135);
-            this.lblTaskTime.Name = "lblTaskTime";
-            this.lblTaskTime.Size = new System.Drawing.Size(31, 15);
-            this.lblTaskTime.TabIndex = 7;
-            this.lblTaskTime.Text = "0:00";
+            this.timeEntryModelBindingSource.DataSource = typeof(GreenGoblin.WindowsForm.TimeEntryModel);
             // 
             // MainForm
             // 
@@ -233,16 +290,21 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MediumSeaGreen;
             this.ClientSize = new System.Drawing.Size(789, 564);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgvTimeEntries);
             this.Controls.Add(this.txtDescription);
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Green Goblin";
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -267,6 +329,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn endDateTimeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn startDateTimeDataGridViewTextBoxColumn;
         private System.Windows.Forms.Label lblTaskTime;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
 
