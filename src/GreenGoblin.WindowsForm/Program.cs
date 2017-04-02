@@ -13,7 +13,8 @@ namespace GreenGoblin.WindowsForm
         [STAThread]
         static void Main()
         {
-            GreenGoblinViewModel viewModel = new GreenGoblinViewModel();
+            IGreenGoblinRepository repository = null;
+            GreenGoblinViewModel viewModel = new GreenGoblinViewModel(repository);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

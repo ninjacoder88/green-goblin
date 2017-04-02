@@ -1,12 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace GreenGoblin.WindowsForm
 {
     public class GreenGoblinViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public GreenGoblinViewModel(IGreenGoblinRepository repository)
+        {
+            _repository = repository;
+        }
+
+        public bool PendingChanges
+        {
+            get { return _pendingChanges; }
+            private set
+            {
+                _pendingChanges = value;
+                OnPropertyChanged(nameof(PendingChanges));
+            }
+        }
 
         public string SelectedTaskTime
         {
@@ -37,6 +53,52 @@ namespace GreenGoblin.WindowsForm
         public void EndOfDay()
         {
             ActiveModel.EndDateTime = DateTime.Now;
+            PendingChanges = true;
+        }
+
+        public void Load()
+        {
+            Reset();
+
+            var models = _repository.LoadModels().ToList();
+
+            foreach (var timeEntryModel in models)
+            {
+                var model = new TimeEntryModel(timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category);
+                TimeEntryModels.Add(model);
+            }
+
+            PendingChanges = false;
+        }
+
+        public void Reconcile()
+        {
+            foreach (var selectedTimeEntryModel in SelectedTimeEntryModels)
+            {
+                selectedTimeEntryModel.Reconciled = true;
+            }
+        }
+
+        public void RemoveEntry()
+        {
+            if (!SelectedTimeEntryModels.Any())
+            {
+                return;
+            }
+
+            foreach (var selectedTimeEntryModel in SelectedTimeEntryModels)
+            {
+                TimeEntryModels.Remove(selectedTimeEntryModel);
+            }
+
+            PendingChanges = true;
+        }
+
+        public void Save()
+        {
+            _repository.Save(TimeEntryModels);
+
+            PendingChanges = false;
         }
 
         public void StartBreak()
@@ -63,10 +125,11 @@ namespace GreenGoblin.WindowsForm
                 ActiveModel.EndDateTime = DateTime.Now;
             }
 
-            var model = new TimeEntryModel {StartDateTime = DateTime.Now, Description = TaskDescription, Category = string.Empty};
+            var model = new TimeEntryModel(DateTime.Now, null, TaskDescription, string.Empty);
             TimeEntryModels.Add(model);
             TaskDescription = string.Empty;
             ActiveModel = model;
+            PendingChanges = true;
         }
 
         public void UpdateSelectedModels(List<TimeEntryModel> selectedModels)
@@ -93,6 +156,17 @@ namespace GreenGoblin.WindowsForm
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void Reset()
+        {
+            TaskDescription = string.Empty;
+            SelectedTaskTime = string.Empty;
+            SelectedTimeEntryModels.Clear();
+            TimeEntryModels.Clear();
+            ActiveModel = null;
+        }
+
+        private bool _pendingChanges;
+        private readonly IGreenGoblinRepository _repository;
         private string _selectedTaskTime;
         private List<TimeEntryModel> _selectedTimeEntryModels;
         private string _taskDescription;
