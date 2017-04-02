@@ -13,14 +13,14 @@ namespace GreenGoblin.Repository
             var entries =
                 new List<TimeEntry>
                     {
-                        new TimeEntry(new DateTime(2017, 04, 01, 6, 30, 12), new DateTime(2017, 04, 01, 6, 45, 12),
+                        new TimeEntry(1, new DateTime(2017, 04, 01, 6, 30, 12), new DateTime(2017, 04, 01, 6, 45, 12),
                                       "Support Ticket", string.Empty)
                     };
 
             return entries;
         }
 
-        public void Save(IEnumerable<TimeEntry> models)
+        public void Save(IEnumerable<TimeEntry> timeEntries)
         {
         }
     }

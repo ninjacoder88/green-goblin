@@ -9,6 +9,6 @@ namespace GreenGoblin.Repository
     {
         IEnumerable<TimeEntry> Load();
 
-        void Save(IEnumerable<TimeEntry> models);
+        void Save(IEnumerable<TimeEntry> timeEntries);
     }
 }

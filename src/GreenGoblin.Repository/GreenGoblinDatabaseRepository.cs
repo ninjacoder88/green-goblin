@@ -9,7 +9,7 @@ namespace GreenGoblin.Repository
             yield break;
         }
 
-        public void Save(IEnumerable<TimeEntry> models)
+        public void Save(IEnumerable<TimeEntry> timeEntries)
         {
         }
     }

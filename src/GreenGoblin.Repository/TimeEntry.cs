@@ -4,13 +4,16 @@ namespace GreenGoblin.Repository
 {
     public class TimeEntry
     {
-        public TimeEntry(DateTime startDateTime, DateTime? endDateTime, string description, string category)
+        public TimeEntry(int timeEntryId, DateTime startDateTime, DateTime? endDateTime, string description, string category)
         {
+            TimeEntryId = timeEntryId;
             StartDateTime = startDateTime;
             EndDateTime = endDateTime;
             Description = description;
             Category = category;
         }
+
+        public int TimeEntryId { get; private set; }
 
         public DateTime StartDateTime { get; set; }
 
