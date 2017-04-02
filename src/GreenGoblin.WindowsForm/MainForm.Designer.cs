@@ -35,12 +35,17 @@
             this.btnBreak = new System.Windows.Forms.Button();
             this.btnLunch = new System.Windows.Forms.Button();
             this.timeEntryModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.btnEnd = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.startTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.endTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.categoryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnEnd = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.durationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.durationTimeSpanDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.endDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.startDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblTaskTime = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -65,12 +70,19 @@
             this.startTimeDataGridViewTextBoxColumn,
             this.endTimeDataGridViewTextBoxColumn,
             this.descriptionDataGridViewTextBoxColumn,
-            this.categoryDataGridViewTextBoxColumn});
+            this.categoryDataGridViewTextBoxColumn,
+            this.durationDataGridViewTextBoxColumn,
+            this.durationTimeSpanDataGridViewTextBoxColumn,
+            this.endDateTimeDataGridViewTextBoxColumn,
+            this.startDateTimeDataGridViewTextBoxColumn});
             this.dgvTimeEntries.DataSource = this.timeEntryModelBindingSource;
             this.dgvTimeEntries.Location = new System.Drawing.Point(12, 41);
             this.dgvTimeEntries.Name = "dgvTimeEntries";
+            this.dgvTimeEntries.ReadOnly = true;
+            this.dgvTimeEntries.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvTimeEntries.Size = new System.Drawing.Size(629, 511);
             this.dgvTimeEntries.TabIndex = 1;
+            this.dgvTimeEntries.SelectionChanged += new System.EventHandler(this.dgvTimeEntries_SelectionChanged);
             // 
             // btnStart
             // 
@@ -118,6 +130,34 @@
             // 
             this.timeEntryModelBindingSource.DataSource = typeof(GreenGoblin.WindowsForm.TimeEntryModel);
             // 
+            // btnEnd
+            // 
+            this.btnEnd.BackColor = System.Drawing.Color.LightGreen;
+            this.btnEnd.FlatAppearance.BorderSize = 0;
+            this.btnEnd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEnd.ForeColor = System.Drawing.Color.DarkGreen;
+            this.btnEnd.Location = new System.Drawing.Point(6, 109);
+            this.btnEnd.Name = "btnEnd";
+            this.btnEnd.Size = new System.Drawing.Size(122, 23);
+            this.btnEnd.TabIndex = 5;
+            this.btnEnd.Text = "End of Day";
+            this.btnEnd.UseVisualStyleBackColor = false;
+            this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lblTaskTime);
+            this.groupBox1.Controls.Add(this.btnStart);
+            this.groupBox1.Controls.Add(this.btnEnd);
+            this.groupBox1.Controls.Add(this.btnBreak);
+            this.groupBox1.Controls.Add(this.btnLunch);
+            this.groupBox1.Location = new System.Drawing.Point(647, 41);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(136, 155);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Task Management";
+            // 
             // startTimeDataGridViewTextBoxColumn
             // 
             this.startTimeDataGridViewTextBoxColumn.DataPropertyName = "StartTime";
@@ -137,42 +177,58 @@
             this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
             this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
             this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // categoryDataGridViewTextBoxColumn
             // 
             this.categoryDataGridViewTextBoxColumn.DataPropertyName = "Category";
             this.categoryDataGridViewTextBoxColumn.HeaderText = "Category";
             this.categoryDataGridViewTextBoxColumn.Name = "categoryDataGridViewTextBoxColumn";
+            this.categoryDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // btnEnd
+            // durationDataGridViewTextBoxColumn
             // 
-            this.btnEnd.BackColor = System.Drawing.Color.LightGreen;
-            this.btnEnd.FlatAppearance.BorderSize = 0;
-            this.btnEnd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEnd.ForeColor = System.Drawing.Color.DarkGreen;
-            this.btnEnd.Location = new System.Drawing.Point(6, 109);
-            this.btnEnd.Name = "btnEnd";
-            this.btnEnd.Size = new System.Drawing.Size(122, 23);
-            this.btnEnd.TabIndex = 5;
-            this.btnEnd.Text = "End of Day";
-            this.btnEnd.UseVisualStyleBackColor = false;
-            this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
+            this.durationDataGridViewTextBoxColumn.DataPropertyName = "Duration";
+            this.durationDataGridViewTextBoxColumn.HeaderText = "Duration";
+            this.durationDataGridViewTextBoxColumn.Name = "durationDataGridViewTextBoxColumn";
+            this.durationDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // groupBox1
+            // durationTimeSpanDataGridViewTextBoxColumn
             // 
-            this.groupBox1.Controls.Add(this.btnStart);
-            this.groupBox1.Controls.Add(this.btnEnd);
-            this.groupBox1.Controls.Add(this.btnBreak);
-            this.groupBox1.Controls.Add(this.btnLunch);
-            this.groupBox1.Location = new System.Drawing.Point(647, 41);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(136, 141);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Task Management";
+            this.durationTimeSpanDataGridViewTextBoxColumn.DataPropertyName = "DurationTimeSpan";
+            this.durationTimeSpanDataGridViewTextBoxColumn.HeaderText = "DurationTimeSpan";
+            this.durationTimeSpanDataGridViewTextBoxColumn.Name = "durationTimeSpanDataGridViewTextBoxColumn";
+            this.durationTimeSpanDataGridViewTextBoxColumn.ReadOnly = true;
+            this.durationTimeSpanDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // endDateTimeDataGridViewTextBoxColumn
+            // 
+            this.endDateTimeDataGridViewTextBoxColumn.DataPropertyName = "EndDateTime";
+            this.endDateTimeDataGridViewTextBoxColumn.HeaderText = "EndDateTime";
+            this.endDateTimeDataGridViewTextBoxColumn.Name = "endDateTimeDataGridViewTextBoxColumn";
+            this.endDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            this.endDateTimeDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // startDateTimeDataGridViewTextBoxColumn
+            // 
+            this.startDateTimeDataGridViewTextBoxColumn.DataPropertyName = "StartDateTime";
+            this.startDateTimeDataGridViewTextBoxColumn.HeaderText = "StartDateTime";
+            this.startDateTimeDataGridViewTextBoxColumn.Name = "startDateTimeDataGridViewTextBoxColumn";
+            this.startDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            this.startDateTimeDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // lblTaskTime
+            // 
+            this.lblTaskTime.AutoSize = true;
+            this.lblTaskTime.Location = new System.Drawing.Point(52, 135);
+            this.lblTaskTime.Name = "lblTaskTime";
+            this.lblTaskTime.Size = new System.Drawing.Size(31, 15);
+            this.lblTaskTime.TabIndex = 7;
+            this.lblTaskTime.Text = "0:00";
             // 
             // MainForm
             // 
+            this.AcceptButton = this.btnStart;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MediumSeaGreen;
@@ -182,10 +238,11 @@
             this.Controls.Add(this.txtDescription);
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "Green Goblin";
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -198,13 +255,18 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnBreak;
         private System.Windows.Forms.Button btnLunch;
+        private System.Windows.Forms.BindingSource timeEntryModelBindingSource;
+        private System.Windows.Forms.Button btnEnd;
+        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn startTimeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn endTimeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn categoryDataGridViewTextBoxColumn;
-        private System.Windows.Forms.BindingSource timeEntryModelBindingSource;
-        private System.Windows.Forms.Button btnEnd;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn durationDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn durationTimeSpanDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn endDateTimeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn startDateTimeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Label lblTaskTime;
     }
 }
 

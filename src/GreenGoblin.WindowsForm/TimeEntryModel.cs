@@ -27,6 +27,10 @@ namespace GreenGoblin.WindowsForm
             }
         }
 
+        public string Duration => DurationTimeSpan.ToString("hh':'mm");
+
+        public TimeSpan DurationTimeSpan => EndDateTime == null ? DateTime.Now - StartDateTime : EndDateTime.Value - StartDateTime;
+
         public DateTime? EndDateTime
         {
             get { return _endDateTime; }
