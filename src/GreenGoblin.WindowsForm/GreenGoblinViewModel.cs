@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using GreenGoblin.Repository;
 
 namespace GreenGoblin.WindowsForm
 {
@@ -12,6 +13,16 @@ namespace GreenGoblin.WindowsForm
         public GreenGoblinViewModel(IGreenGoblinRepository repository)
         {
             _repository = repository;
+        }
+
+        public bool Loading
+        {
+            get { return _loading; }
+            private set
+            {
+                _loading = value;
+                OnPropertyChanged(nameof(Loading));
+            }
         }
 
         public bool PendingChanges
@@ -50,25 +61,34 @@ namespace GreenGoblin.WindowsForm
 
         private TimeEntryModel ActiveModel { get; set; }
 
+        public void BeginLoading()
+        {
+            Loading = true;
+        }
+
         public void EndOfDay()
         {
             ActiveModel.EndDateTime = DateTime.Now;
             PendingChanges = true;
         }
 
-        public void Load()
+        public void LoadData()
+        {
+            _timeEntries = _repository.Load().ToList();
+        }
+
+        public void LoadModels()
         {
             Reset();
 
-            var models = _repository.LoadModels().ToList();
-
-            foreach (var timeEntryModel in models)
+            foreach (var timeEntry in _timeEntries)
             {
-                var model = new TimeEntryModel(timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category);
+                var model = new TimeEntryModel(timeEntry.StartDateTime, timeEntry.EndDateTime, timeEntry.Description, timeEntry.Category);
                 TimeEntryModels.Add(model);
             }
 
             PendingChanges = false;
+            Loading = false;
         }
 
         public void Reconcile()
@@ -77,6 +97,13 @@ namespace GreenGoblin.WindowsForm
             {
                 selectedTimeEntryModel.Reconciled = true;
             }
+        }
+
+        public void Refresh()
+        {
+            BeginLoading();
+            LoadData();
+            LoadModels();
         }
 
         public void RemoveEntry()
@@ -96,7 +123,13 @@ namespace GreenGoblin.WindowsForm
 
         public void Save()
         {
-            _repository.Save(TimeEntryModels);
+            var timeEntries = new List<TimeEntry>();
+            foreach (var timeEntryModel in TimeEntryModels)
+            {
+                timeEntries.Add(new TimeEntry(timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
+            }
+
+            _repository.Save(timeEntries);
 
             PendingChanges = false;
         }
@@ -165,11 +198,13 @@ namespace GreenGoblin.WindowsForm
             ActiveModel = null;
         }
 
+        private bool _loading;
         private bool _pendingChanges;
         private readonly IGreenGoblinRepository _repository;
         private string _selectedTaskTime;
         private List<TimeEntryModel> _selectedTimeEntryModels;
         private string _taskDescription;
+        private List<TimeEntry> _timeEntries = new List<TimeEntry>();
         private BindingList<TimeEntryModel> _timeEntryModel;
     }
 }

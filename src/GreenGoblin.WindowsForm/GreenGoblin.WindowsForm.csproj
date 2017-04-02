@@ -47,7 +47,6 @@
       <DependentUpon>EditEntryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GreenGoblinViewModel.cs" />
-    <Compile Include="IGreenGoblinRepository.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,7 +86,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\GreenGoblin.Repository\GreenGoblin.Repository.csproj">
+      <Project>{4d8c0d96-5adf-493d-8816-d3bcd4b873c9}</Project>
+      <Name>GreenGoblin.Repository</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

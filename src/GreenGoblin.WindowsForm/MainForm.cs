@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -16,20 +17,12 @@ namespace GreenGoblin.WindowsForm
             txtDescription.DataBindings.Add(nameof(txtDescription.Text), _viewModel, nameof(_viewModel.TaskDescription));
             lblTaskTime.DataBindings.Add(nameof(lblTaskTime.Text), _viewModel, nameof(_viewModel.SelectedTaskTime));
             btnSave.DataBindings.Add(nameof(btnSave.Enabled), _viewModel, nameof(_viewModel.PendingChanges));
+            progressBar1.DataBindings.Add(nameof(progressBar1.Visible), _viewModel, nameof(_viewModel.Loading));
             btnSave.EnabledChanged += btnSave_EnabledChanged;
-        }
+            //progressBar1.Visible = true;
 
-        private void btnSave_EnabledChanged(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            if (!button.Enabled)
-            {
-                button.BackColor = Color.MediumAquamarine;
-            }
-            else
-            {
-                button.BackColor = Color.LightGreen;
-            }
+            _worker.DoWork += Worker_DoWork;
+            _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
         }
 
         private void btnBreak_Click(object sender, EventArgs e)
@@ -54,7 +47,7 @@ namespace GreenGoblin.WindowsForm
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            _viewModel.Load();
+            _viewModel.Refresh();
         }
 
         private void btnRemoveEntry_Click(object sender, EventArgs e)
@@ -65,6 +58,19 @@ namespace GreenGoblin.WindowsForm
         private void btnSave_Click(object sender, EventArgs e)
         {
             _viewModel.Save();
+        }
+
+        private void btnSave_EnabledChanged(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            if (!button.Enabled)
+            {
+                button.BackColor = Color.MediumAquamarine;
+            }
+            else
+            {
+                button.BackColor = Color.LightGreen;
+            }
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -114,6 +120,23 @@ namespace GreenGoblin.WindowsForm
             _viewModel.UpdateSelectedModels(selectedModels);
         }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            _viewModel.BeginLoading();
+            _worker.RunWorkerAsync();
+        }
+
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            _viewModel.LoadData();
+        }
+
+        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _viewModel.LoadModels();
+        }
+
         private readonly GreenGoblinViewModel _viewModel;
+        private readonly BackgroundWorker _worker = new BackgroundWorker();
     }
 }

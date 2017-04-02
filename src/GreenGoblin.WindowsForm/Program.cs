@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GreenGoblin.Repository;
 
 namespace GreenGoblin.WindowsForm
 {
@@ -13,8 +14,8 @@ namespace GreenGoblin.WindowsForm
         [STAThread]
         static void Main()
         {
-            IGreenGoblinRepository repository = null;
-            GreenGoblinViewModel viewModel = new GreenGoblinViewModel(repository);
+            IGreenGoblinRepository repository = new TestingRepository();
+            var viewModel = new GreenGoblinViewModel(repository);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
