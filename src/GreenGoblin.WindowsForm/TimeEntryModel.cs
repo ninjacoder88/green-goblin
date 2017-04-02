@@ -5,6 +5,14 @@ namespace GreenGoblin.WindowsForm
 {
     public class TimeEntryModel : INotifyPropertyChanged
     {
+        public TimeEntryModel(DateTime startTime, DateTime? endTime, string description, string category)
+        {
+            _startDateTime = startTime;
+            _endDateTime = endTime;
+            _description = description;
+            _category = category;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string Category
@@ -38,10 +46,21 @@ namespace GreenGoblin.WindowsForm
             {
                 _endDateTime = value;
                 OnPropertyChanged(nameof(EndDateTime));
+                OnPropertyChanged(nameof(Duration));
             }
         }
 
-        public string EndTime => EndDateTime?.ToString("yyyy-MM-dd hh:mm") ?? string.Empty;
+        public string EndTime => EndDateTime?.ToString("yyyy-MM-dd hh:mm tt") ?? string.Empty;
+
+        public bool Reconciled
+        {
+            get { return _reconciled; }
+            set
+            {
+                _reconciled = value;
+                OnPropertyChanged(nameof(Reconciled));
+            }
+        }
 
         public DateTime StartDateTime
         {
@@ -50,10 +69,11 @@ namespace GreenGoblin.WindowsForm
             {
                 _startDateTime = value;
                 OnPropertyChanged(nameof(StartDateTime));
+                OnPropertyChanged(nameof(Duration));
             }
         }
 
-        public string StartTime => StartDateTime.ToString("yyyy-MM-dd hh:mm");
+        public string StartTime => StartDateTime.ToString("yyyy-MM-dd hh:mm tt");
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -63,6 +83,7 @@ namespace GreenGoblin.WindowsForm
         private string _category;
         private string _description;
         private DateTime? _endDateTime;
+        private bool _reconciled;
         private DateTime _startDateTime;
     }
 }
