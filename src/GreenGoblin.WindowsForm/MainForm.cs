@@ -18,8 +18,8 @@ namespace GreenGoblin.WindowsForm
             lblTaskTime.DataBindings.Add(nameof(lblTaskTime.Text), _viewModel, nameof(_viewModel.SelectedTaskTime));
             btnSave.DataBindings.Add(nameof(btnSave.Enabled), _viewModel, nameof(_viewModel.PendingChanges));
             progressBar1.DataBindings.Add(nameof(progressBar1.Visible), _viewModel, nameof(_viewModel.Loading));
-            btnSave.EnabledChanged += btnSave_EnabledChanged;
-            //progressBar1.Visible = true;
+            panelButtons.DataBindings.Add(nameof(panelButtons.Enabled), _viewModel, nameof(_viewModel.NotLoading));
+            txtDescription.DataBindings.Add(nameof(txtDescription.Enabled), _viewModel, nameof(_viewModel.NotLoading));
 
             _worker.DoWork += Worker_DoWork;
             _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
@@ -52,25 +52,19 @@ namespace GreenGoblin.WindowsForm
 
         private void btnRemoveEntry_Click(object sender, EventArgs e)
         {
+            var dialogResult = MessageBox.Show(this, "Are you sure you want to remove the selected entries?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (dialogResult != DialogResult.Yes)
+            {
+                return;
+            }
+
             _viewModel.RemoveEntry();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             _viewModel.Save();
-        }
-
-        private void btnSave_EnabledChanged(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            if (!button.Enabled)
-            {
-                button.BackColor = Color.MediumAquamarine;
-            }
-            else
-            {
-                button.BackColor = Color.LightGreen;
-            }
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -118,6 +112,23 @@ namespace GreenGoblin.WindowsForm
                 selectedModels.Add(model);
             }
             _viewModel.UpdateSelectedModels(selectedModels);
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!_viewModel.PendingChanges)
+            {
+                return;
+            }
+
+            var dialogResult = MessageBox.Show(this, "There are pending changes. Would you like to save?", "Pending Changed", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (dialogResult != DialogResult.Yes)
+            {
+                return;
+            }
+
+            _viewModel.Save();
         }
 
         private void MainForm_Load(object sender, EventArgs e)

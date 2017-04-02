@@ -22,8 +22,11 @@ namespace GreenGoblin.WindowsForm
             {
                 _loading = value;
                 OnPropertyChanged(nameof(Loading));
+                OnPropertyChanged(nameof(NotLoading));
             }
         }
+
+        public bool NotLoading => !Loading;
 
         public bool PendingChanges
         {
@@ -83,7 +86,7 @@ namespace GreenGoblin.WindowsForm
 
             foreach (var timeEntry in _timeEntries)
             {
-                var model = new TimeEntryModel(timeEntry.StartDateTime, timeEntry.EndDateTime, timeEntry.Description, timeEntry.Category);
+                var model = new TimeEntryModel(timeEntry.TimeEntryId, timeEntry.StartDateTime, timeEntry.EndDateTime, timeEntry.Description, timeEntry.Category);
                 TimeEntryModels.Add(model);
             }
 
@@ -126,7 +129,7 @@ namespace GreenGoblin.WindowsForm
             var timeEntries = new List<TimeEntry>();
             foreach (var timeEntryModel in TimeEntryModels)
             {
-                timeEntries.Add(new TimeEntry(timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
+                timeEntries.Add(new TimeEntry(timeEntryModel.Id, timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
             }
 
             _repository.Save(timeEntries);
@@ -158,7 +161,7 @@ namespace GreenGoblin.WindowsForm
                 ActiveModel.EndDateTime = DateTime.Now;
             }
 
-            var model = new TimeEntryModel(DateTime.Now, null, TaskDescription, string.Empty);
+            var model = new TimeEntryModel(0, DateTime.Now, null, TaskDescription, string.Empty);
             TimeEntryModels.Add(model);
             TaskDescription = string.Empty;
             ActiveModel = model;

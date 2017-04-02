@@ -5,13 +5,16 @@ namespace GreenGoblin.WindowsForm
 {
     public class TimeEntryModel : INotifyPropertyChanged
     {
-        public TimeEntryModel(DateTime startTime, DateTime? endTime, string description, string category)
+        public TimeEntryModel(int id,  DateTime startTime, DateTime? endTime, string description, string category)
         {
+            Id = id;
             _startDateTime = startTime;
             _endDateTime = endTime;
             _description = description;
             _category = category;
         }
+
+        public int Id { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

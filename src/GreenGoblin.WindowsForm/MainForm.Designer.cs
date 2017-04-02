@@ -50,13 +50,13 @@
             this.btnReconcile = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelButtons = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.panelButtons.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -252,7 +252,7 @@
             this.btnRemoveEntry.FlatAppearance.BorderSize = 0;
             this.btnRemoveEntry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRemoveEntry.ForeColor = System.Drawing.Color.DarkGreen;
-            this.btnRemoveEntry.Location = new System.Drawing.Point(9, 176);
+            this.btnRemoveEntry.Location = new System.Drawing.Point(9, 487);
             this.btnRemoveEntry.Name = "btnRemoveEntry";
             this.btnRemoveEntry.Size = new System.Drawing.Size(122, 23);
             this.btnRemoveEntry.TabIndex = 7;
@@ -266,7 +266,7 @@
             this.btnReconcile.FlatAppearance.BorderSize = 0;
             this.btnReconcile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReconcile.ForeColor = System.Drawing.Color.DarkGreen;
-            this.btnReconcile.Location = new System.Drawing.Point(9, 205);
+            this.btnReconcile.Location = new System.Drawing.Point(9, 282);
             this.btnReconcile.Name = "btnReconcile";
             this.btnReconcile.Size = new System.Drawing.Size(122, 23);
             this.btnReconcile.TabIndex = 8;
@@ -280,7 +280,7 @@
             this.btnRefresh.FlatAppearance.BorderSize = 0;
             this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRefresh.ForeColor = System.Drawing.Color.DarkGreen;
-            this.btnRefresh.Location = new System.Drawing.Point(9, 234);
+            this.btnRefresh.Location = new System.Drawing.Point(9, 516);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(122, 23);
             this.btnRefresh.TabIndex = 9;
@@ -294,7 +294,7 @@
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.ForeColor = System.Drawing.Color.DarkGreen;
-            this.btnSave.Location = new System.Drawing.Point(9, 263);
+            this.btnSave.Location = new System.Drawing.Point(9, 545);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(122, 23);
             this.btnSave.TabIndex = 10;
@@ -302,18 +302,18 @@
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // panel1
+            // panelButtons
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.groupBox1);
-            this.panel1.Controls.Add(this.btnRemoveEntry);
-            this.panel1.Controls.Add(this.btnReconcile);
-            this.panel1.Controls.Add(this.btnSave);
-            this.panel1.Controls.Add(this.btnRefresh);
-            this.panel1.Location = new System.Drawing.Point(888, 44);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(144, 324);
-            this.panel1.TabIndex = 13;
+            this.panelButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelButtons.Controls.Add(this.groupBox1);
+            this.panelButtons.Controls.Add(this.btnRemoveEntry);
+            this.panelButtons.Controls.Add(this.btnReconcile);
+            this.panelButtons.Controls.Add(this.btnSave);
+            this.panelButtons.Controls.Add(this.btnRefresh);
+            this.panelButtons.Location = new System.Drawing.Point(888, 44);
+            this.panelButtons.Name = "panelButtons";
+            this.panelButtons.Size = new System.Drawing.Size(144, 571);
+            this.panelButtons.TabIndex = 13;
             // 
             // panel2
             // 
@@ -344,18 +344,19 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MediumSeaGreen;
             this.ClientSize = new System.Drawing.Size(1044, 630);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panelButtons);
             this.Controls.Add(this.panel2);
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Green Goblin";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.panel1.ResumeLayout(false);
+            this.panelButtons.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
@@ -377,7 +378,7 @@
         private System.Windows.Forms.Button btnReconcile;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.DataGridViewTextBoxColumn startTimeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn endTimeDataGridViewTextBoxColumn;
