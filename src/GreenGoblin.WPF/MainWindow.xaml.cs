@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Practices.Unity;
 
 namespace GreenGoblin.WPF
 {
@@ -23,6 +24,12 @@ namespace GreenGoblin.WPF
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        [Dependency]
+        public GreenGoblinViewModel ViewModel
+        {
+            set { DataContext = value; }
         }
     }
 }

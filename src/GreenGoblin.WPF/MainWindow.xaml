@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GreenGoblin.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Background="Lime">
+        Title="MainWindow" Height="350" Width="525" Background="MediumSeaGreen">
     <Grid>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="417"/>
         <DataGrid HorizontalAlignment="Left" Height="271" Margin="10,38,0,0" VerticalAlignment="Top" Width="417"/>
-        <Button x:Name="btnStart" Content="Start Task" HorizontalAlignment="Left" Margin="432,38,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="432,63,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnStart" Content="Start Task" HorizontalAlignment="Left" Margin="432,38,0,0" VerticalAlignment="Top" Width="75" Background="LightGreen"/>
+        <Button Content="Break" HorizontalAlignment="Left" Margin="432,63,0,0" VerticalAlignment="Top" Width="75" Background="LightGreen"/>
+        <Button Content="Lunch" HorizontalAlignment="Left" Margin="432,88,0,0" VerticalAlignment="Top" Width="75" Background="LightGreen"/>
+        <Button Content="End of Day" HorizontalAlignment="Left" Margin="432,113,0,0" VerticalAlignment="Top" Width="75" Background="LightGreen"/>
 
     </Grid>
 </Window>
