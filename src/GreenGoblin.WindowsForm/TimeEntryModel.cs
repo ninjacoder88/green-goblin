@@ -50,6 +50,7 @@ namespace GreenGoblin.WindowsForm
                 _endDateTime = value;
                 OnPropertyChanged(nameof(EndDateTime));
                 OnPropertyChanged(nameof(Duration));
+                OnPropertyChanged(nameof(EndTime));
             }
         }
 
@@ -73,6 +74,7 @@ namespace GreenGoblin.WindowsForm
                 _startDateTime = value;
                 OnPropertyChanged(nameof(StartDateTime));
                 OnPropertyChanged(nameof(Duration));
+                OnPropertyChanged(nameof(StartTime));
             }
         }
 
