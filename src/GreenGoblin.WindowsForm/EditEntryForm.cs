@@ -12,7 +12,7 @@ namespace GreenGoblin.WindowsForm
             FormModel = new TimeEntryModel(model.Id, model.StartDateTime, model.EndDateTime, model.Description, model.Category);
             EditModel = model;
 
-            if (FormModel.EndDateTime == null)
+            if (FormModel.EndDateTime == DateTime.MaxValue)
             {
                 FormModel.EndDateTime = dtpEnd.MaxDate;
             }
@@ -29,17 +29,20 @@ namespace GreenGoblin.WindowsForm
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            //TODO: if end time was null, but is no longer, need to terminate active model
+            //TODO: if start or end time change, need to update/warn other models
+
             EditModel.Category = FormModel.Category;
             EditModel.Description = FormModel.Description;
             EditModel.StartDateTime = FormModel.StartDateTime;
 
             if (dtpEnd.Value == dtpEnd.MaxDate)
             {
-                EditModel.EndDateTime = null;
+                EditModel.EndDateTime = DateTime.MaxValue;
             }
             else
             {
-                EditModel.EndDateTime = dtpEnd.Value;
+                EditModel.EndDateTime = FormModel.EndDateTime;
             }
         }
     }

@@ -53,7 +53,7 @@ namespace GreenGoblin.WindowsForm
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            StartLoding();
+            StartLoading();
         }
 
         private void btnRemoveEntry_Click(object sender, EventArgs e)
@@ -88,6 +88,8 @@ namespace GreenGoblin.WindowsForm
             {
                 form.ShowDialog();
             }
+
+            _viewModel.ValidateOverlap();
         }
 
         private void dgvTimeEntries_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -98,6 +100,10 @@ namespace GreenGoblin.WindowsForm
             if (model.Reconciled)
             {
                 e.CellStyle.BackColor = Color.Green;
+            }
+            if (model.OverlapWarning)
+            {
+                e.CellStyle.ForeColor = Color.Red;
             }
         }
 
@@ -139,10 +145,10 @@ namespace GreenGoblin.WindowsForm
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            StartLoding();
+            StartLoading();
         }
 
-        private void StartLoding()
+        private void StartLoading()
         {
             _viewModel.StartLoading();
             _worker.RunWorkerAsync();

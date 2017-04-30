@@ -97,14 +97,38 @@ namespace GreenGoblin.WindowsForm
 
             foreach (var timeEntry in _timeEntries)
             {
-                var model = new TimeEntryModel(timeEntry.TimeEntryId, timeEntry.StartDateTime, timeEntry.EndDateTime, timeEntry.Description, timeEntry.Category);
+                var model = new TimeEntryModel(timeEntry.TimeEntryId, timeEntry.StartDateTime, timeEntry.EndDateTime ?? DateTime.MaxValue, timeEntry.Description, timeEntry.Category);
                 TimeEntryModels.Add(model);
             }
 
-            ActiveModel = TimeEntryModels.FirstOrDefault(x => x.EndDateTime == null);
+            ActiveModel = TimeEntryModels.FirstOrDefault(x => x.EndDateTime == DateTime.MaxValue);
 
             PendingChanges = false;
             Loading = false;
+        }
+
+        public void ValidateOverlap()
+        {
+            if (TimeEntryModels.Count <= 1)
+            {
+                return;
+            }
+
+            for (int i = 1; i < TimeEntryModels.Count; i++)
+            {
+                var recent = TimeEntryModels[i - 1];
+                var past = TimeEntryModels[i];
+
+                if (recent.StartDateTime < past.EndDateTime)
+                {
+                    //TODO: fire off event to change color/fix cell formatting event
+                    recent.OverlapWarning = true;
+                }
+                else
+                {
+                    recent.OverlapWarning = false;
+                }
+            }
         }
 
         public void Reconcile()
@@ -122,7 +146,8 @@ namespace GreenGoblin.WindowsForm
                 return;
             }
 
-            foreach (var selectedTimeEntryModel in SelectedTimeEntryModels)
+            var entriesToRemove = SelectedTimeEntryModels.ToList();
+            foreach (var selectedTimeEntryModel in entriesToRemove)
             {
                 TimeEntryModels.Remove(selectedTimeEntryModel);
             }
@@ -167,7 +192,7 @@ namespace GreenGoblin.WindowsForm
                 ActiveModel.EndDateTime = DateTime.Now;
             }
 
-            var model = new TimeEntryModel(0, DateTime.Now, null, TaskDescription, string.Empty);
+            var model = new TimeEntryModel(0, DateTime.Now, DateTime.MaxValue, TaskDescription, string.Empty);
             TimeEntryModels.Add(model);
             TaskDescription = string.Empty;
             ActiveModel = model;
@@ -184,7 +209,7 @@ namespace GreenGoblin.WindowsForm
             TimeSpan total = TimeSpan.Zero;
             foreach (var timeEntryModel in selectedModels)
             {
-                if (timeEntryModel.EndDateTime == null)
+                if (timeEntryModel.EndDateTime == DateTime.MaxValue)
                 {
                     total = total.Add(DateTime.Now - timeEntryModel.StartDateTime);
                     continue;

@@ -5,7 +5,9 @@ namespace GreenGoblin.WindowsForm
 {
     public class TimeEntryModel : INotifyPropertyChanged
     {
-        public TimeEntryModel(int id,  DateTime startTime, DateTime? endTime, string description, string category)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public TimeEntryModel(int id, DateTime startTime, DateTime endTime, string description, string category)
         {
             Id = id;
             _startDateTime = startTime;
@@ -13,10 +15,6 @@ namespace GreenGoblin.WindowsForm
             _description = description;
             _category = category;
         }
-
-        public int Id { get; private set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public string Category
         {
@@ -40,9 +38,9 @@ namespace GreenGoblin.WindowsForm
 
         public string Duration => DurationTimeSpan.ToString("hh':'mm");
 
-        public TimeSpan DurationTimeSpan => EndDateTime == null ? DateTime.Now - StartDateTime : EndDateTime.Value - StartDateTime;
+        public TimeSpan DurationTimeSpan => EndDateTime == DateTime.MaxValue ? DateTime.Now - StartDateTime : EndDateTime - StartDateTime;
 
-        public DateTime? EndDateTime
+        public DateTime EndDateTime
         {
             get { return _endDateTime; }
             set
@@ -54,7 +52,23 @@ namespace GreenGoblin.WindowsForm
             }
         }
 
-        public string EndTime => EndDateTime?.ToString("yyyy-MM-dd hh:mm tt") ?? string.Empty;
+        public string EndTime => EndDateTime == DateTime.MaxValue ? string.Empty : EndDateTime.ToString("yyyy-MM-dd hh:mm tt");
+
+        public int Id { get; private set; }
+
+        public bool OverlapWarning
+        {
+            get { return _overlapWarning; }
+            set
+            {
+                if (value == _overlapWarning)
+                {
+                    return;
+                }
+                _overlapWarning = value;
+                OnPropertyChanged(nameof(OverlapWarning));
+            }
+        }
 
         public bool Reconciled
         {
@@ -87,7 +101,8 @@ namespace GreenGoblin.WindowsForm
 
         private string _category;
         private string _description;
-        private DateTime? _endDateTime;
+        private DateTime _endDateTime;
+        private bool _overlapWarning;
         private bool _reconciled;
         private DateTime _startDateTime;
     }
