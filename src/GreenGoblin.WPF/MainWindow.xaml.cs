@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Practices.Unity;
 
 namespace GreenGoblin.WPF
 {
@@ -24,12 +12,80 @@ namespace GreenGoblin.WPF
         public MainWindow()
         {
             InitializeComponent();
+            _viewModel = new GreenGoblinViewModel();
+
+            _worker.DoWork += Worker_DoWork;
+            _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+
+            //DataContext = _viewModel;
         }
 
-        [Dependency]
-        public GreenGoblinViewModel ViewModel
+        public GreenGoblinViewModel ViewModel => _viewModel;
+
+        private void BtnBreak_Click(object sender, RoutedEventArgs e)
         {
-            set { DataContext = value; }
+            _viewModel.StartBreak();
         }
+
+        private void BtnEndDay_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.EndDay();
+        }
+
+        private void BtnLunch_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.StartLunch();
+        }
+
+        private void BtnReconcile_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Reconcile();
+        }
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            StartLoading();
+        }
+
+        private void BtnRemoveEntry_Click(object sender, RoutedEventArgs e)
+        {
+            var dialogResult = MessageBox.Show(this, "Are you sure you want to remove the selected entries?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (dialogResult != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            _viewModel.RemoveEntry();
+        }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Save();
+        }
+
+        private void BtnStart_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.StartTask();
+        }
+
+        private void StartLoading()
+        {
+            _viewModel.StartLoading();
+            _worker.RunWorkerAsync();
+        }
+
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            _viewModel.Load();
+        }
+
+        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _viewModel.FinishLoading();
+        }
+
+        private readonly BackgroundWorker _worker = new BackgroundWorker();
+        private readonly GreenGoblinViewModel _viewModel;
     }
 }

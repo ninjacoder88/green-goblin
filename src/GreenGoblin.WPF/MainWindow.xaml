@@ -5,14 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GreenGoblin.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Background="MediumSeaGreen">
-    <Grid>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="417"/>
-        <DataGrid HorizontalAlignment="Left" Height="271" Margin="10,38,0,0" VerticalAlignment="Top" Width="417"/>
-        <Button x:Name="btnStart" Content="Start Task" HorizontalAlignment="Left" Margin="432,38,0,0" VerticalAlignment="Top" Width="75" Background="LightGreen"/>
-        <Button Content="Break" HorizontalAlignment="Left" Margin="432,63,0,0" VerticalAlignment="Top" Width="75" Background="LightGreen"/>
-        <Button Content="Lunch" HorizontalAlignment="Left" Margin="432,88,0,0" VerticalAlignment="Top" Width="75" Background="LightGreen"/>
-        <Button Content="End of Day" HorizontalAlignment="Left" Margin="432,113,0,0" VerticalAlignment="Top" Width="75" Background="LightGreen"/>
-
+        Title="MainWindow" Background="MediumSeaGreen" Width="598" Height="504" MinWidth="700" MinHeight="500" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10,10,10,10" >
+        <Grid.DataContext>
+            <local:GreenGoblinViewModel/>
+        </Grid.DataContext>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding TextDescription}"/>
+            <DataGrid x:Name="TimeEntryGrid" Grid.Row="1" ItemsSource="{Binding TimeEntryModels}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Category" Binding="{Binding Category}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <StackPanel Grid.Column="1" Margin="10,28,0,0">
+            <Button x:Name="BtnStart" Content="Start Task" Background="LightGreen" Margin="0,0,0,0" Click="BtnStart_Click"/>
+            <Button x:Name="BtnBreak" Content="Break" Background="LightGreen" Margin="0,5,0,0" Click="BtnBreak_Click"/>
+            <Button x:Name="BtnLunch" Content="Lunch" Background="LightGreen" Margin="0,5,0,0" Click="BtnLunch_Click"/>
+            <Button x:Name="BtnEndDay" Content="End of Day" Background="LightGreen" Margin="0,5,0,0" Click="BtnEndDay_Click"/>
+            <Button x:Name="BtnReconcile" Content="Reconcile" Background="LightGreen" Margin="0,50,0,0" Click="BtnReconcile_Click"/>
+            <Button x:Name="BtnRemoveEntry" Content="Remove Entry" Background="LightGreen" Margin="0,50,0,0" Click="BtnRemoveEntry_Click"/>
+            <Button x:Name="BtnRefresh" Content="Refresh" Background="LightGreen" Margin="0,5,0,0" Click="BtnRefresh_Click"/>
+            <Button x:Name="BtnSave" Content="Save" Background="LightGreen" Margin="0,5,0,0" Click="BtnSave_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
