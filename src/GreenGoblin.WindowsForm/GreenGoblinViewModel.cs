@@ -15,6 +15,8 @@ namespace GreenGoblin.WindowsForm
             _repository = repository;
         }
 
+        public bool ActiveModelOpen => ActiveModel != null;
+
         public bool Loading
         {
             get { return _loading; }
@@ -62,9 +64,17 @@ namespace GreenGoblin.WindowsForm
 
         public BindingList<TimeEntryModel> TimeEntryModels => _timeEntryModel ?? (_timeEntryModel = new BindingList<TimeEntryModel>());
 
-        private TimeEntryModel ActiveModel { get; set; }
+        private TimeEntryModel ActiveModel
+        {
+            get { return _activeModel; }
+            set
+            {
+                _activeModel = value;
+                OnPropertyChanged(nameof(ActiveModelOpen));
+            }
+        }
 
-        public void BeginLoading()
+        public void StartLoading()
         {
             Loading = true;
         }
@@ -73,14 +83,15 @@ namespace GreenGoblin.WindowsForm
         {
             ActiveModel.EndDateTime = DateTime.Now;
             PendingChanges = true;
+            ActiveModel = null;
         }
 
-        public void LoadData()
+        public void Load()
         {
-            _timeEntries = _repository.Load().ToList();
+            _timeEntries = _repository.Load().OrderByDescending(x => x.StartDateTime).ToList();
         }
 
-        public void LoadModels()
+        public void FinishLoading()
         {
             Reset();
 
@@ -89,6 +100,8 @@ namespace GreenGoblin.WindowsForm
                 var model = new TimeEntryModel(timeEntry.TimeEntryId, timeEntry.StartDateTime, timeEntry.EndDateTime, timeEntry.Description, timeEntry.Category);
                 TimeEntryModels.Add(model);
             }
+
+            ActiveModel = TimeEntryModels.FirstOrDefault(x => x.EndDateTime == null);
 
             PendingChanges = false;
             Loading = false;
@@ -100,13 +113,6 @@ namespace GreenGoblin.WindowsForm
             {
                 selectedTimeEntryModel.Reconciled = true;
             }
-        }
-
-        public void Refresh()
-        {
-            BeginLoading();
-            LoadData();
-            LoadModels();
         }
 
         public void RemoveEntry()
@@ -166,6 +172,8 @@ namespace GreenGoblin.WindowsForm
             TaskDescription = string.Empty;
             ActiveModel = model;
             PendingChanges = true;
+
+            SortModels();
         }
 
         public void UpdateSelectedModels(List<TimeEntryModel> selectedModels)
@@ -201,6 +209,17 @@ namespace GreenGoblin.WindowsForm
             ActiveModel = null;
         }
 
+        private void SortModels()
+        {
+            var orderedModels = TimeEntryModels.OrderByDescending(x => x.StartDateTime).ToList();
+            TimeEntryModels.Clear();
+            foreach (var timeEntryModel in orderedModels)
+            {
+                TimeEntryModels.Add(timeEntryModel);
+            }
+        }
+
+        private TimeEntryModel _activeModel;
         private bool _loading;
         private bool _pendingChanges;
         private readonly IGreenGoblinRepository _repository;

@@ -14,12 +14,18 @@ namespace GreenGoblin.WindowsForm
             InitializeComponent();
 
             dgvTimeEntries.DataSource = viewModel.TimeEntryModels;
+
             txtDescription.DataBindings.Add(nameof(txtDescription.Text), _viewModel, nameof(_viewModel.TaskDescription));
+            txtDescription.DataBindings.Add(nameof(txtDescription.Enabled), _viewModel, nameof(_viewModel.NotLoading));
+
             lblTaskTime.DataBindings.Add(nameof(lblTaskTime.Text), _viewModel, nameof(_viewModel.SelectedTaskTime));
-            btnSave.DataBindings.Add(nameof(btnSave.Enabled), _viewModel, nameof(_viewModel.PendingChanges));
             progressBar1.DataBindings.Add(nameof(progressBar1.Visible), _viewModel, nameof(_viewModel.Loading));
             panelButtons.DataBindings.Add(nameof(panelButtons.Enabled), _viewModel, nameof(_viewModel.NotLoading));
-            txtDescription.DataBindings.Add(nameof(txtDescription.Enabled), _viewModel, nameof(_viewModel.NotLoading));
+
+            btnSave.DataBindings.Add(nameof(btnSave.Enabled), _viewModel, nameof(_viewModel.PendingChanges));
+            btnEnd.DataBindings.Add(nameof(btnEnd.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
+            btnBreak.DataBindings.Add(nameof(btnBreak.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
+            btnLunch.DataBindings.Add(nameof(btnLunch.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
 
             _worker.DoWork += Worker_DoWork;
             _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
@@ -47,7 +53,7 @@ namespace GreenGoblin.WindowsForm
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            _viewModel.Refresh();
+            StartLoding();
         }
 
         private void btnRemoveEntry_Click(object sender, EventArgs e)
@@ -133,18 +139,23 @@ namespace GreenGoblin.WindowsForm
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _viewModel.BeginLoading();
+            StartLoding();
+        }
+
+        private void StartLoding()
+        {
+            _viewModel.StartLoading();
             _worker.RunWorkerAsync();
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            _viewModel.LoadData();
+            _viewModel.Load();
         }
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _viewModel.LoadModels();
+            _viewModel.FinishLoading();
         }
 
         private readonly GreenGoblinViewModel _viewModel;
