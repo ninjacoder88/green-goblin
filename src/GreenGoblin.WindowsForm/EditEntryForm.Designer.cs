@@ -125,34 +125,35 @@
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.ForeColor = System.Drawing.Color.DarkGreen;
-            this.btnSave.Location = new System.Drawing.Point(244, 188);
+            this.btnSave.Location = new System.Drawing.Point(244, 186);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 9;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // EditEntryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MediumSeaGreen;
-            this.ClientSize = new System.Drawing.Size(331, 217);
+            this.ClientSize = new System.Drawing.Size(331, 221);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.txtCategory);
-            this.Controls.Add(this.txtDescription);
-            this.Controls.Add(this.dtpEnd);
-            this.Controls.Add(this.dtpStart);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.dtpStart);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtCategory);
+            this.Controls.Add(this.dtpEnd);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtDescription);
+            this.Controls.Add(this.label4);
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(347, 256);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(347, 256);
+            this.MinimumSize = new System.Drawing.Size(347, 260);
             this.Name = "EditEntryForm";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Edit Entry";
             this.ResumeLayout(false);
