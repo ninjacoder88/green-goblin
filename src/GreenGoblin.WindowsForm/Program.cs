@@ -15,7 +15,7 @@ namespace GreenGoblin.WindowsForm
         static void Main()
         {
             IGreenGoblinRepository repository = new TestingRepository();
-            IGreenGoblinRepository fileRepository = new GreenGoblinFileRepository(@"C:\temp\time.txt");
+            IGreenGoblinRepository fileRepository = new GreenGoblinFileRepository(@"C:\development\Time Tracking\time.txt");
             var viewModel = new GreenGoblinViewModel(fileRepository);
 
             Application.EnableVisualStyles();

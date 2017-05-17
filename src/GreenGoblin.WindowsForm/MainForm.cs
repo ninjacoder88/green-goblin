@@ -84,12 +84,17 @@ namespace GreenGoblin.WindowsForm
             var row = dgv.Rows[e.RowIndex];
             var model = row.DataBoundItem as TimeEntryModel;
 
+            bool modelUpdated = false;
             using (var form = new EditEntryForm(model))
             {
                 form.ShowDialog();
+                modelUpdated = form.ModelUpdated;
             }
 
-            _viewModel.ValidateOverlap();
+            if (modelUpdated)
+            {
+                _viewModel.ModelEdited(model);
+            }
         }
 
         private void dgvTimeEntries_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)

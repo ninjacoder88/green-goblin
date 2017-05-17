@@ -74,21 +74,11 @@ namespace GreenGoblin.WindowsForm
             }
         }
 
-        public void StartLoading()
-        {
-            Loading = true;
-        }
-
         public void EndOfDay()
         {
             ActiveModel.EndDateTime = DateTime.Now;
             PendingChanges = true;
             ActiveModel = null;
-        }
-
-        public void Load()
-        {
-            _timeEntries = _repository.Load().OrderByDescending(x => x.StartDateTime).ToList();
         }
 
         public void FinishLoading()
@@ -101,34 +91,21 @@ namespace GreenGoblin.WindowsForm
                 TimeEntryModels.Add(model);
             }
 
-            ActiveModel = TimeEntryModels.FirstOrDefault(x => x.EndDateTime == DateTime.MaxValue);
+            ActiveModel = TimeEntryModels.FirstOrDefault(x => x.EndDateTime.IsMaxDateTime());
 
             PendingChanges = false;
             Loading = false;
         }
 
-        public void ValidateOverlap()
+        public void Load()
         {
-            if (TimeEntryModels.Count <= 1)
-            {
-                return;
-            }
+            _timeEntries = _repository.Load().OrderByDescending(x => x.StartDateTime).ToList();
+        }
 
-            for (int i = 1; i < TimeEntryModels.Count; i++)
-            {
-                var recent = TimeEntryModels[i - 1];
-                var past = TimeEntryModels[i];
-
-                if (recent.StartDateTime < past.EndDateTime)
-                {
-                    //TODO: fire off event to change color/fix cell formatting event
-                    recent.OverlapWarning = true;
-                }
-                else
-                {
-                    recent.OverlapWarning = false;
-                }
-            }
+        public void ModelEdited(TimeEntryModel model)
+        {
+            ValidateOverlap();
+            PendingChanges = true;
         }
 
         public void Reconcile()
@@ -172,6 +149,11 @@ namespace GreenGoblin.WindowsForm
         {
             TaskDescription = "ON BREAK";
             StartTask();
+        }
+
+        public void StartLoading()
+        {
+            Loading = true;
         }
 
         public void StartLunch()
@@ -241,6 +223,30 @@ namespace GreenGoblin.WindowsForm
             foreach (var timeEntryModel in orderedModels)
             {
                 TimeEntryModels.Add(timeEntryModel);
+            }
+        }
+
+        private void ValidateOverlap()
+        {
+            if (TimeEntryModels.Count <= 1)
+            {
+                return;
+            }
+
+            for (int i = 1; i < TimeEntryModels.Count; i++)
+            {
+                var recent = TimeEntryModels[i - 1];
+                var past = TimeEntryModels[i];
+
+                if (recent.StartDateTime < past.EndDateTime)
+                {
+                    //TODO: fire off event to change color/fix cell formatting event
+                    recent.OverlapWarning = true;
+                }
+                else
+                {
+                    recent.OverlapWarning = false;
+                }
             }
         }
 

@@ -12,7 +12,7 @@ namespace GreenGoblin.WindowsForm
             FormModel = new TimeEntryModel(model.Id, model.StartDateTime, model.EndDateTime, model.Description, model.Category);
             EditModel = model;
 
-            if (FormModel.EndDateTime == DateTime.MaxValue)
+            if (FormModel.EndDateTime.IsMaxDateTime())
             {
                 FormModel.EndDateTime = dtpEnd.MaxDate;
             }
@@ -23,6 +23,8 @@ namespace GreenGoblin.WindowsForm
             txtCategory.DataBindings.Add(nameof(txtCategory.Text), FormModel, nameof(FormModel.Category));
         }
 
+        public bool ModelUpdated { get; private set; }
+
         private TimeEntryModel EditModel { get; }
 
         private TimeEntryModel FormModel { get; }
@@ -32,17 +34,37 @@ namespace GreenGoblin.WindowsForm
             //TODO: if end time was null, but is no longer, need to terminate active model
             //TODO: if start or end time change, need to update/warn other models
 
-            EditModel.Category = FormModel.Category;
-            EditModel.Description = FormModel.Description;
-            EditModel.StartDateTime = FormModel.StartDateTime;
-
-            if (dtpEnd.Value == dtpEnd.MaxDate)
+            if (EditModel.Category != FormModel.Category)
             {
-                EditModel.EndDateTime = DateTime.MaxValue;
+                EditModel.Category = FormModel.Category;
+                ModelUpdated = true;
             }
-            else
+            if (EditModel.Description != FormModel.Description)
             {
-                EditModel.EndDateTime = FormModel.EndDateTime;
+                EditModel.Description = FormModel.Description;
+                ModelUpdated = true;
+            }
+            if (EditModel.StartDateTime != FormModel.StartDateTime)
+            {
+                EditModel.StartDateTime = FormModel.StartDateTime;
+                ModelUpdated = true;
+            }
+            if (EditModel.EndDateTime.IsMaxDateTime() && dtpEnd.Value.IsMaxDateTime())
+            {
+                //no changes
+                return;
+            }
+            if(EditModel.EndDateTime != dtpEnd.Value)
+            {
+                if (dtpEnd.Value == dtpEnd.MaxDate)
+                {
+                    EditModel.EndDateTime = DateTime.MaxValue;
+                }
+                else
+                {
+                    EditModel.EndDateTime = FormModel.EndDateTime;
+                }
+                ModelUpdated = true;
             }
         }
     }
