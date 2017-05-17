@@ -38,7 +38,7 @@ namespace GreenGoblin.WindowsForm
 
         public string Duration => DurationTimeSpan.ToString("hh':'mm");
 
-        public TimeSpan DurationTimeSpan => EndDateTime == DateTime.MaxValue ? DateTime.Now - StartDateTime : EndDateTime - StartDateTime;
+        public TimeSpan DurationTimeSpan =>  EndDateTime.IsMaxDateTime() ? DateTime.Now - StartDateTime : EndDateTime - StartDateTime;
 
         public DateTime EndDateTime
         {
@@ -52,7 +52,7 @@ namespace GreenGoblin.WindowsForm
             }
         }
 
-        public string EndTime => EndDateTime == DateTime.MaxValue ? string.Empty : EndDateTime.ToString("yyyy-MM-dd hh:mm tt");
+        public string EndTime => EndDateTime.IsMaxDateTime() ? string.Empty : EndDateTime.ToString("yyyy-MM-dd hh:mm tt");
 
         public int Id { get; private set; }
 
