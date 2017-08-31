@@ -17,6 +17,8 @@ namespace GreenGoblin.WindowsForm
 
         public bool ActiveModelOpen => ActiveModel != null;
 
+        public bool LoadBackupFile { get; set; }
+
         public bool Loading
         {
             get => _loading;
@@ -74,7 +76,10 @@ namespace GreenGoblin.WindowsForm
             }
         }
 
-        public bool LoadBackupFile { get; set; }
+        public bool CheckBackupFile()
+        {
+            return _repository.CheckBackupFile();
+        }
 
         public void EndOfDay()
         {
@@ -90,7 +95,8 @@ namespace GreenGoblin.WindowsForm
 
             foreach (var timeEntry in _timeEntries)
             {
-                var model = new TimeEntryModel(timeEntry.TimeEntryId, timeEntry.StartDateTime, timeEntry.EndDateTime ?? DateTime.MaxValue, timeEntry.Description, timeEntry.Category);
+                var model = new TimeEntryModel(timeEntry.TimeEntryId, timeEntry.StartDateTime, timeEntry.EndDateTime ?? DateTime.MaxValue, timeEntry.Description,
+                                               timeEntry.Category);
                 TimeEntryModels.Add(model);
             }
 
@@ -155,17 +161,6 @@ namespace GreenGoblin.WindowsForm
             _repository.Save(timeEntries);
 
             PendingChanges = false;
-        }
-
-        private void SaveBackup()
-        {
-            var timeEntries = new List<TimeEntry>();
-            foreach (var timeEntryModel in TimeEntryModels)
-            {
-                timeEntries.Add(new TimeEntry(timeEntryModel.Id, timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
-            }
-
-            _repository.SaveBackup(timeEntries);
         }
 
         public void StartBreak()
@@ -242,6 +237,17 @@ namespace GreenGoblin.WindowsForm
             ActiveModel = null;
         }
 
+        private void SaveBackup()
+        {
+            var timeEntries = new List<TimeEntry>();
+            foreach (var timeEntryModel in TimeEntryModels)
+            {
+                timeEntries.Add(new TimeEntry(timeEntryModel.Id, timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
+            }
+
+            _repository.SaveBackup(timeEntries);
+        }
+
         private void SortModels()
         {
             var orderedModels = TimeEntryModels.OrderByDescending(x => x.StartDateTime).ToList();
@@ -285,10 +291,5 @@ namespace GreenGoblin.WindowsForm
         private string _taskDescription;
         private List<TimeEntry> _timeEntries = new List<TimeEntry>();
         private BindingList<TimeEntryModel> _timeEntryModel;
-
-        public bool CheckBackupFile()
-        {
-            return _repository.CheckBackupFile();
-        }
     }
 }
