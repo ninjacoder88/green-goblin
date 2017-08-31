@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GreenGoblin.Repository
 {
     public interface IGreenGoblinRepository
     {
-        IEnumerable<TimeEntry> Load();
+        bool CheckBackupFile();
+
+        IEnumerable<TimeEntry> LoadBackupTime();
+
+        IEnumerable<TimeEntry> LoadTime();
 
         void Save(IEnumerable<TimeEntry> timeEntries);
+
+        void SaveBackup(IEnumerable<TimeEntry> timeEntries);
     }
 }

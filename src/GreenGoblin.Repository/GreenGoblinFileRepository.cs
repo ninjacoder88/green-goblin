@@ -8,22 +8,85 @@ namespace GreenGoblin.Repository
 {
     public class GreenGoblinFileRepository : IGreenGoblinRepository
     {
-        private readonly string _filePath;
-
-        public GreenGoblinFileRepository(string filePath)
+        public GreenGoblinFileRepository(string filePath, string backupFilePath)
         {
             _filePath = filePath;
+            _backupFilePath = backupFilePath;
         }
 
-        public IEnumerable<TimeEntry> Load()
+        public bool CheckBackupFile()
         {
-            if (!File.Exists(_filePath))
+            return File.Exists(_backupFilePath);
+        }
+
+        public IEnumerable<TimeEntry> LoadBackupTime()
+        {
+            return Load(_backupFilePath);
+        }
+
+        public IEnumerable<TimeEntry> LoadTime()
+        {
+            return Load(_filePath);
+        }
+
+        public void Save(IEnumerable<TimeEntry> timeEntries)
+        {
+            var fileLines = new List<string>();
+            var timeEntryList = timeEntries.ToList();
+
+            int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
+
+            foreach (var timeEntry in timeEntryList)
             {
-                var stream = File.Create(_filePath);
+                if (timeEntry.TimeEntryId == 0)
+                {
+                    var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
+                    prop.SetValue(timeEntry, nextId++);
+                }
+
+                fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+            }
+
+            File.WriteAllLines(_filePath, fileLines);
+            File.Delete(_backupFilePath);
+        }
+
+        public void SaveBackup(IEnumerable<TimeEntry> timeEntries)
+        {
+            if (!File.Exists(_backupFilePath))
+            {
+                var stream = File.Create(_backupFilePath);
                 stream.Close();
             }
 
-            var fileLines = File.ReadAllLines(_filePath).ToList();
+            var fileLines = new List<string>();
+            var timeEntryList = timeEntries.ToList();
+
+            int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
+
+            foreach (var timeEntry in timeEntryList)
+            {
+                if (timeEntry.TimeEntryId == 0)
+                {
+                    var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
+                    prop.SetValue(timeEntry, nextId++);
+                }
+
+                fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+            }
+
+            File.WriteAllLines(_backupFilePath, fileLines);
+        }
+
+        private IEnumerable<TimeEntry> Load(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                var stream = File.Create(filePath);
+                stream.Close();
+            }
+
+            var fileLines = File.ReadAllLines(filePath).ToList();
 
             var timeEntries = new List<TimeEntry>();
 
@@ -49,25 +112,7 @@ namespace GreenGoblin.Repository
             return timeEntries;
         }
 
-        public void Save(IEnumerable<TimeEntry> timeEntries)
-        {
-            var fileLines = new List<string>();
-            var timeEntryList = timeEntries.ToList();
-
-            int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
-
-            foreach (var timeEntry in timeEntryList)
-            {
-                if (timeEntry.TimeEntryId == 0)
-                {
-                    var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
-                    prop.SetValue(timeEntry, nextId++);
-                }
-
-                 fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
-            }
-
-            File.WriteAllLines(_filePath, fileLines);
-        }
+        private readonly string _filePath;
+        private readonly string _backupFilePath;
     }
 }

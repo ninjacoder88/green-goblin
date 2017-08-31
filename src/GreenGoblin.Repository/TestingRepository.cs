@@ -6,7 +6,17 @@ namespace GreenGoblin.Repository
 {
     public class TestingRepository : IGreenGoblinRepository
     {
-        public IEnumerable<TimeEntry> Load()
+        public bool CheckBackupFile()
+        {
+            return false;
+        }
+
+        public IEnumerable<TimeEntry> LoadBackupTime()
+        {
+            yield break;
+        }
+
+        public IEnumerable<TimeEntry> LoadTime()
         {
             Thread.Sleep(5000);
 
@@ -21,6 +31,10 @@ namespace GreenGoblin.Repository
         }
 
         public void Save(IEnumerable<TimeEntry> timeEntries)
+        {
+        }
+
+        public void SaveBackup(IEnumerable<TimeEntry> timeEntries)
         {
         }
     }
