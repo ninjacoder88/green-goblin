@@ -22,8 +22,11 @@
             <TextBox Grid.Row="0" TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding TextDescription}"/>
             <DataGrid x:Name="TimeEntryGrid" Grid.Row="1" ItemsSource="{Binding TimeEntryModels}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Category" Binding="{Binding Category}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Description" Binding="{Binding Description}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Category" Binding="{Binding Category}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Duration" Binding="{Binding Duration}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
