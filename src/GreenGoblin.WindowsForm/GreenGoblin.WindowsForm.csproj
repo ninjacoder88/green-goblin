@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>stopwatch10_p6i_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -40,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackupFileExistsEventArgs.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="EditEntryForm.cs">
       <SubType>Form</SubType>
@@ -91,6 +95,9 @@
       <Project>{4d8c0d96-5adf-493d-8816-d3bcd4b873c9}</Project>
       <Name>GreenGoblin.Repository</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="stopwatch10_p6i_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

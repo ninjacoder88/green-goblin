@@ -53,6 +53,15 @@ namespace GreenGoblin.WindowsForm
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            if (_viewModel.PendingChanges)
+            {
+                var dialogResult = MessageBox.Show(this, "There are pending changes. Would you like to save?", "Pending Changed", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    _viewModel.Save();
+                }
+            }
+
             StartLoading();
         }
 
@@ -155,6 +164,15 @@ namespace GreenGoblin.WindowsForm
 
         private void StartLoading()
         {
+            if (_viewModel.CheckBackupFile())
+            {
+                var dialogResult = MessageBox.Show(this, "A backup file exists. Would you like to load from the backup file?", "Load Backup File", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    _viewModel.LoadBackupFile = true;
+                }
+            }
+
             _viewModel.StartLoading();
             _worker.RunWorkerAsync();
         }

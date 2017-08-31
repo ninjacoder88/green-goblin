@@ -19,7 +19,7 @@ namespace GreenGoblin.WindowsForm
 
         public bool Loading
         {
-            get { return _loading; }
+            get => _loading;
             private set
             {
                 _loading = value;
@@ -32,7 +32,7 @@ namespace GreenGoblin.WindowsForm
 
         public bool PendingChanges
         {
-            get { return _pendingChanges; }
+            get => _pendingChanges;
             private set
             {
                 _pendingChanges = value;
@@ -42,7 +42,7 @@ namespace GreenGoblin.WindowsForm
 
         public string SelectedTaskTime
         {
-            get { return _selectedTaskTime; }
+            get => _selectedTaskTime;
             set
             {
                 _selectedTaskTime = value;
@@ -54,7 +54,7 @@ namespace GreenGoblin.WindowsForm
 
         public string TaskDescription
         {
-            get { return _taskDescription; }
+            get => _taskDescription;
             set
             {
                 _taskDescription = value;
@@ -66,7 +66,7 @@ namespace GreenGoblin.WindowsForm
 
         private TimeEntryModel ActiveModel
         {
-            get { return _activeModel; }
+            get => _activeModel;
             set
             {
                 _activeModel = value;
@@ -74,11 +74,14 @@ namespace GreenGoblin.WindowsForm
             }
         }
 
+        public bool LoadBackupFile { get; set; }
+
         public void EndOfDay()
         {
             ActiveModel.EndDateTime = DateTime.Now;
             PendingChanges = true;
             ActiveModel = null;
+            SaveBackup();
         }
 
         public void FinishLoading()
@@ -93,19 +96,27 @@ namespace GreenGoblin.WindowsForm
 
             ActiveModel = TimeEntryModels.FirstOrDefault(x => x.EndDateTime.IsMaxDateTime());
 
-            PendingChanges = false;
+            PendingChanges = LoadBackupFile;
             Loading = false;
+            LoadBackupFile = false;
         }
 
         public void Load()
         {
-            _timeEntries = _repository.Load().OrderByDescending(x => x.StartDateTime).ToList();
+            if (LoadBackupFile)
+            {
+                _timeEntries = _repository.LoadBackupTime().OrderByDescending(x => x.StartDateTime).ToList();
+                return;
+            }
+
+            _timeEntries = _repository.LoadTime().OrderByDescending(x => x.StartDateTime).ToList();
         }
 
         public void ModelEdited(TimeEntryModel model)
         {
             ValidateOverlap();
             PendingChanges = true;
+            SaveBackup();
         }
 
         public void Reconcile()
@@ -130,6 +141,7 @@ namespace GreenGoblin.WindowsForm
             }
 
             PendingChanges = true;
+            SaveBackup();
         }
 
         public void Save()
@@ -145,10 +157,22 @@ namespace GreenGoblin.WindowsForm
             PendingChanges = false;
         }
 
+        private void SaveBackup()
+        {
+            var timeEntries = new List<TimeEntry>();
+            foreach (var timeEntryModel in TimeEntryModels)
+            {
+                timeEntries.Add(new TimeEntry(timeEntryModel.Id, timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
+            }
+
+            _repository.SaveBackup(timeEntries);
+        }
+
         public void StartBreak()
         {
             TaskDescription = "ON BREAK";
             StartTask();
+            SaveBackup();
         }
 
         public void StartLoading()
@@ -160,6 +184,7 @@ namespace GreenGoblin.WindowsForm
         {
             TaskDescription = "LUNCH";
             StartTask();
+            SaveBackup();
         }
 
         public void StartTask()
@@ -181,6 +206,7 @@ namespace GreenGoblin.WindowsForm
             PendingChanges = true;
 
             SortModels();
+            SaveBackup();
         }
 
         public void UpdateSelectedModels(List<TimeEntryModel> selectedModels)
@@ -259,5 +285,10 @@ namespace GreenGoblin.WindowsForm
         private string _taskDescription;
         private List<TimeEntry> _timeEntries = new List<TimeEntry>();
         private BindingList<TimeEntryModel> _timeEntryModel;
+
+        public bool CheckBackupFile()
+        {
+            return _repository.CheckBackupFile();
+        }
     }
 }
