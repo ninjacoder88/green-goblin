@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenGoblin.Repository", "G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenGoblin.WPF", "GreenGoblin.WPF\GreenGoblin.WPF.csproj", "{A456EEF0-3B0B-4042-BDBB-85F72FF4F442}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenGoblin.WindowsFormApplication", "GreenGoblin.Application\GreenGoblin.WindowsFormApplication.csproj", "{9F3A7378-3EEB-4283-95A8-E97C203132A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +29,15 @@ Global
 		{A456EEF0-3B0B-4042-BDBB-85F72FF4F442}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A456EEF0-3B0B-4042-BDBB-85F72FF4F442}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A456EEF0-3B0B-4042-BDBB-85F72FF4F442}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F3A7378-3EEB-4283-95A8-E97C203132A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F3A7378-3EEB-4283-95A8-E97C203132A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F3A7378-3EEB-4283-95A8-E97C203132A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F3A7378-3EEB-4283-95A8-E97C203132A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE6397FE-102E-45C7-A61D-45327103F9D6}
 	EndGlobalSection
 EndGlobal
