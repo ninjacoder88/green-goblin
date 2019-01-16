@@ -39,10 +39,12 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
             get => SelectedCategory.Name;
             set
             {
-                SelectedCategory.Name = value;
+                _selectedCategoryName = value;
                 OnPropertyChanged();
             }
         }
+
+        private string _selectedCategoryName;
 
         public void AddCategory()
         {

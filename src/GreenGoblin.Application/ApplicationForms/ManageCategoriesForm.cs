@@ -19,7 +19,6 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
             btnDelete.DataBindings.Add(nameof(btnDelete.Enabled), _viewModel, nameof(_viewModel.Editing));
             textCategoryName.DataBindings.Add(nameof(textCategoryName.Text), _viewModel, nameof(_viewModel.NewCategoryName));
             textEditCategory.DataBindings.Add(nameof(textEditCategory.Enabled), _viewModel, nameof(_viewModel.Editing));
-            textEditCategory.DataBindings.Add(nameof());
 
             dgvCategories.SelectionChanged += DgvCategories_SelectionChanged;
         }
