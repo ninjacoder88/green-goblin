@@ -11,7 +11,7 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
             _viewModel = viewModel;
             InitializeComponent();
 
-            dgvCategories.DataSource = _viewModel.Cateorgies;
+            dgvCategories.DataSource = _viewModel.Categories;
 
             btnEdit.DataBindings.Add(nameof(btnEdit.Enabled), _viewModel, nameof(_viewModel.NotEditing));
             btnSaveEdit.DataBindings.Add(nameof(btnSaveEdit.Enabled), _viewModel, nameof(_viewModel.Editing));

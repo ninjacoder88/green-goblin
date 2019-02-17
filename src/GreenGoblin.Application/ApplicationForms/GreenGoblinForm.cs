@@ -4,7 +4,7 @@ using GreenGoblin.WindowsFormApplication.ApplicationForms;
 using GreenGoblin.WindowsFormApplication.Models;
 using GreenGoblin.WindowsFormApplication.ViewModels;
 
-namespace GreenGoblin.WindowsFormApplication
+namespace GreenGoblin.WindowsFormApplication.ApplicationForms
 {
     public partial class GreenGoblinForm : Form
     {
@@ -21,6 +21,15 @@ namespace GreenGoblin.WindowsFormApplication
             dgvWorkDays.SelectionChanged += DgvWorkDays_SelectionChanged;
             dgvTasks.SelectionChanged += DgvTasks_SelectionChanged;
             comboCategories.SelectedIndexChanged += ComboCategories_SelectedIndexChanged;
+        }
+
+        private void btnManageCategories_Click(object sender, System.EventArgs e)
+        {
+            var viewModel = new ManageCatergoriesViewModel();
+            using (var form = new ManageCategoriesForm(viewModel))
+            {
+                form.ShowDialog(this);
+            }
         }
 
         private void ComboCategories_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -75,14 +84,5 @@ namespace GreenGoblin.WindowsFormApplication
         }
 
         private readonly GreenGoblinViewModel _viewModel;
-
-        private void btnManageCategories_Click(object sender, System.EventArgs e)
-        {
-            var viewModel = new ManageCatergoriesViewModel();
-            using (var form = new ManageCategoriesForm(viewModel))
-            {
-                form.ShowDialog(this);
-            }
-        }
     }
 }

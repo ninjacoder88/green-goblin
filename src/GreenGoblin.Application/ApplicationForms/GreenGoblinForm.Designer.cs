@@ -1,4 +1,4 @@
-﻿namespace GreenGoblin.WindowsFormApplication
+﻿namespace GreenGoblin.WindowsFormApplication.ApplicationForms
 {
     partial class GreenGoblinForm
     {
@@ -54,9 +54,9 @@
             // dgvTasks
             // 
             this.dgvTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTasks.Location = new System.Drawing.Point(3, 242);
+            this.dgvTasks.Location = new System.Drawing.Point(185, 30);
             this.dgvTasks.Name = "dgvTasks";
-            this.dgvTasks.Size = new System.Drawing.Size(600, 181);
+            this.dgvTasks.Size = new System.Drawing.Size(418, 393);
             this.dgvTasks.TabIndex = 3;
             // 
             // dgvWorkDays
@@ -64,7 +64,7 @@
             this.dgvWorkDays.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvWorkDays.Location = new System.Drawing.Point(3, 29);
             this.dgvWorkDays.Name = "dgvWorkDays";
-            this.dgvWorkDays.Size = new System.Drawing.Size(600, 207);
+            this.dgvWorkDays.Size = new System.Drawing.Size(176, 394);
             this.dgvWorkDays.TabIndex = 2;
             // 
             // comboCategories

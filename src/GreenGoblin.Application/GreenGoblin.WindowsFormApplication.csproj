@@ -51,13 +51,13 @@
     <Compile Include="ApplicationForms\ManageCategoriesForm.Designer.cs">
       <DependentUpon>ManageCategoriesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GreenGoblinForm.cs">
+    <Compile Include="ApplicationForms\GreenGoblinForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GreenGoblinForm.Designer.cs">
+    <Compile Include="ApplicationForms\GreenGoblinForm.Designer.cs">
       <DependentUpon>GreenGoblinForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GreenGoblinViewModel.cs" />
+    <Compile Include="ViewModels\GreenGoblinViewModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\WorkDayModel.cs" />
@@ -67,7 +67,7 @@
     <EmbeddedResource Include="ApplicationForms\ManageCategoriesForm.resx">
       <DependentUpon>ManageCategoriesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GreenGoblinForm.resx">
+    <EmbeddedResource Include="ApplicationForms\GreenGoblinForm.resx">
       <DependentUpon>GreenGoblinForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

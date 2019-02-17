@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using GreenGoblin.WindowsFormApplication.Models;
 
-namespace GreenGoblin.WindowsFormApplication
+namespace GreenGoblin.WindowsFormApplication.ViewModels
 {
     public class GreenGoblinViewModel : INotifyPropertyChanged
     {

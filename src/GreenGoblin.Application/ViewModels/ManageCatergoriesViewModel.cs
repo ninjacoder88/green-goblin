@@ -8,7 +8,7 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public BindingList<CategoryModel> Cateorgies => _categories ?? (_categories = new BindingList<CategoryModel>());
+        public BindingList<CategoryModel> Categories => _categories ?? (_categories = new BindingList<CategoryModel>());
 
         public bool Editing
         {
@@ -44,8 +44,6 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
             }
         }
 
-        private string _selectedCategoryName;
-
         public void AddCategory()
         {
             if (string.IsNullOrEmpty(NewCategoryName))
@@ -53,7 +51,7 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
                 return;
             }
 
-            Cateorgies.Add(new CategoryModel(NewCategoryName));
+            Categories.Add(new CategoryModel(NewCategoryName));
             NewCategoryName = string.Empty;
         }
 
@@ -69,7 +67,8 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
             {
                 return;
             }
-            Cateorgies.Remove(SelectedCategory);
+
+            Categories.Remove(SelectedCategory);
         }
 
         public void Edit()
@@ -90,5 +89,6 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
         private BindingList<CategoryModel> _categories;
         private bool _editing;
         private string _newCategoryName;
+        private string _selectedCategoryName;
     }
 }
