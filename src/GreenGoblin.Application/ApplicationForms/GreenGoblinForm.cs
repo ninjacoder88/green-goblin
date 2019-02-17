@@ -25,10 +25,18 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
 
         private void btnManageCategories_Click(object sender, System.EventArgs e)
         {
-            var viewModel = new ManageCatergoriesViewModel();
+            var viewModel = new ManageCategoriesViewModel();
             using (var form = new ManageCategoriesForm(viewModel))
             {
                 form.ShowDialog(this);
+                if (form.DialogResult == DialogResult.OK)
+                {
+                    _viewModel.Categories.Clear();
+                    foreach (var viewModelCategory in viewModel.Categories)
+                    {
+                        _viewModel.Categories.Add(viewModelCategory);
+                    }
+                }
             }
         }
 

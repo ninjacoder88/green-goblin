@@ -4,7 +4,7 @@ using GreenGoblin.WindowsFormApplication.Models;
 
 namespace GreenGoblin.WindowsFormApplication.ViewModels
 {
-    public class ManageCatergoriesViewModel : INotifyPropertyChanged
+    public class ManageCategoriesViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,12 +20,12 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
             }
         }
 
-        public string NewCategoryName
+        public string CategoryName
         {
-            get => _newCategoryName;
+            get => _categoryName;
             set
             {
-                _newCategoryName = value;
+                _categoryName = value;
                 OnPropertyChanged();
             }
         }
@@ -34,51 +34,53 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
 
         public CategoryModel SelectedCategory { get; set; }
 
-        public string SelectedCategoryName
-        {
-            get => SelectedCategory.Name;
-            set
-            {
-                _selectedCategoryName = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool PendingChanges { get; set; }
 
         public void AddCategory()
         {
-            if (string.IsNullOrEmpty(NewCategoryName))
+            if (string.IsNullOrEmpty(CategoryName))
             {
                 return;
             }
 
-            Categories.Add(new CategoryModel(NewCategoryName));
-            NewCategoryName = string.Empty;
+            Categories.Add(new CategoryModel(CategoryName));
+            CategoryName = string.Empty;
+            PendingChanges = true;
         }
 
         public void CancelEdit()
         {
             Editing = false;
+            CategoryName = string.Empty;
         }
 
         public void Delete()
         {
-            Editing = false;
             if (SelectedCategory == null)
             {
                 return;
             }
 
             Categories.Remove(SelectedCategory);
+            PendingChanges = true;
         }
 
         public void Edit()
         {
             Editing = true;
+            if (SelectedCategory == null)
+            {
+                return;
+            }
+
+            CategoryName = SelectedCategory.Name;
         }
 
         public void SaveEdit()
         {
             Editing = false;
+            SelectedCategory.Name = CategoryName;
+            CategoryName = string.Empty;
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -88,7 +90,6 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
 
         private BindingList<CategoryModel> _categories;
         private bool _editing;
-        private string _newCategoryName;
-        private string _selectedCategoryName;
+        private string _categoryName;
     }
 }

@@ -6,7 +6,7 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
 {
     public partial class ManageCategoriesForm : Form
     {
-        public ManageCategoriesForm(ManageCatergoriesViewModel viewModel)
+        public ManageCategoriesForm(ManageCategoriesViewModel viewModel)
         {
             _viewModel = viewModel;
             InitializeComponent();
@@ -16,9 +16,11 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
             btnEdit.DataBindings.Add(nameof(btnEdit.Enabled), _viewModel, nameof(_viewModel.NotEditing));
             btnSaveEdit.DataBindings.Add(nameof(btnSaveEdit.Enabled), _viewModel, nameof(_viewModel.Editing));
             btnCancelEdit.DataBindings.Add(nameof(btnCancelEdit.Enabled), _viewModel, nameof(_viewModel.Editing));
-            btnDelete.DataBindings.Add(nameof(btnDelete.Enabled), _viewModel, nameof(_viewModel.Editing));
-            textCategoryName.DataBindings.Add(nameof(textCategoryName.Text), _viewModel, nameof(_viewModel.NewCategoryName));
-            textEditCategory.DataBindings.Add(nameof(textEditCategory.Enabled), _viewModel, nameof(_viewModel.Editing));
+
+            btnAdd.DataBindings.Add(nameof(btnAdd.Enabled), _viewModel, nameof(_viewModel.NotEditing));
+            btnDelete.DataBindings.Add(nameof(btnDelete.Enabled), _viewModel, nameof(_viewModel.NotEditing));
+
+            textCategoryName.DataBindings.Add(nameof(textCategoryName.Text), _viewModel, nameof(_viewModel.CategoryName));
 
             dgvCategories.SelectionChanged += DgvCategories_SelectionChanged;
         }
@@ -26,6 +28,10 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
         private void btnAdd_Click(object sender, System.EventArgs e)
         {
             _viewModel.AddCategory();
+        }
+
+        private void btnCancelChanges_Click(object sender, System.EventArgs e)
+        {
         }
 
         private void btnCancelEdit_Click(object sender, System.EventArgs e)
@@ -43,6 +49,10 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
             _viewModel.Edit();
         }
 
+        private void btnSaveChanges_Click(object sender, System.EventArgs e)
+        {
+        }
+
         private void btnSaveEdit_Click(object sender, System.EventArgs e)
         {
             _viewModel.SaveEdit();
@@ -55,7 +65,6 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
 
             if (selectedRows.Count != 1)
             {
-                //_viewModel.SelectedCategory = null;
                 return;
             }
 
@@ -65,6 +74,6 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
             _viewModel.SelectedCategory = categoryModel;
         }
 
-        private readonly ManageCatergoriesViewModel _viewModel;
+        private readonly ManageCategoriesViewModel _viewModel;
     }
 }
