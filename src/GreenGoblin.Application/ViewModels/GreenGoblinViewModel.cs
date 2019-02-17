@@ -7,12 +7,11 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
 {
     public class GreenGoblinViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public GreenGoblinViewModel()
         {
-            Categories.Add(new CategoryModel("None"));
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public BindingList<CategoryModel> Categories => _categories ?? (_categories = new BindingList<CategoryModel>());
 
@@ -35,6 +34,10 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
         public BindingList<WorkDayModel> WorkDays => _workDays ?? (_workDays = new BindingList<WorkDayModel>());
 
         public BindingList<TaskModel> WorkDayTasks => _tasks ?? (_tasks = new BindingList<TaskModel>());
+
+        public void SaveCategories()
+        {
+        }
 
         public void UpdateSelectedTasks(List<TaskModel> taskModels)
         {

@@ -15,5 +15,7 @@ namespace GreenGoblin.WindowsFormApplication.Models
         public string TaskName { get; set; }
 
         public string CategoryName { get; set; }
+
+        public bool Reconciled { get; set; }
     }
 }

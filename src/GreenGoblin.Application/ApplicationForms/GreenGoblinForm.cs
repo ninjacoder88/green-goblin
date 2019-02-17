@@ -29,6 +29,7 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
             using (var form = new ManageCategoriesForm(viewModel))
             {
                 form.ShowDialog(this);
+
                 if (form.DialogResult == DialogResult.OK)
                 {
                     _viewModel.Categories.Clear();
@@ -36,6 +37,8 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
                     {
                         _viewModel.Categories.Add(viewModelCategory);
                     }
+
+                    _viewModel.SaveCategories();
                 }
             }
         }
@@ -92,5 +95,15 @@ namespace GreenGoblin.WindowsFormApplication.ApplicationForms
         }
 
         private readonly GreenGoblinViewModel _viewModel;
+
+        private void btnStartTask_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void btnEndTask_Click(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }
