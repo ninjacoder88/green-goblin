@@ -15,6 +15,10 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
 
         public BindingList<CategoryModel> Categories => _categories ?? (_categories = new BindingList<CategoryModel>());
 
+        public bool LoadBackupFile { get; set; }
+
+        public bool PendingChanges { get; set; }
+
         public CategoryModel SelectedCategory { get; set; }
 
         public List<TaskModel> SelectedTasks => _selectedTasks ?? (_selectedTasks = new List<TaskModel>());
@@ -35,7 +39,36 @@ namespace GreenGoblin.WindowsFormApplication.ViewModels
 
         public BindingList<TaskModel> WorkDayTasks => _tasks ?? (_tasks = new BindingList<TaskModel>());
 
+        public bool CheckBackupFile()
+        {
+            return false;
+        }
+
+        public void EndTask()
+        {
+        }
+
+        public void FinishLoading()
+        {
+        }
+
+        public void Load()
+        {
+        }
+
+        public void Save()
+        {
+        }
+
         public void SaveCategories()
+        {
+        }
+
+        public void StartLoading()
+        {
+        }
+
+        public void StartTask()
         {
         }
 
