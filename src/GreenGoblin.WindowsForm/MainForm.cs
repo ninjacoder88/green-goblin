@@ -17,6 +17,11 @@ namespace GreenGoblin.WindowsForm
 
             txtDescription.DataBindings.Add(nameof(txtDescription.Text), _viewModel, nameof(_viewModel.TaskDescription));
             txtDescription.DataBindings.Add(nameof(txtDescription.Enabled), _viewModel, nameof(_viewModel.NotLoading));
+            txtDescription.TextChanged += txtDescription_TextChanged;
+
+            txtCategory.DataBindings.Add(nameof(txtCategory.Text), _viewModel, nameof(_viewModel.TaskCategory));
+            txtCategory.DataBindings.Add(nameof(txtCategory.Enabled), _viewModel, nameof(_viewModel.NotLoading));
+            txtCategory.TextChanged += txtCategory_TextChanged;
 
             lblTaskTime.DataBindings.Add(nameof(lblTaskTime.Text), _viewModel, nameof(_viewModel.SelectedTaskTime));
             progressBar1.DataBindings.Add(nameof(progressBar1.Visible), _viewModel, nameof(_viewModel.Loading));
@@ -115,6 +120,7 @@ namespace GreenGoblin.WindowsForm
             {
                 e.CellStyle.BackColor = Color.Green;
             }
+
             if (model.OverlapWarning)
             {
                 e.CellStyle.ForeColor = Color.Red;
@@ -137,6 +143,7 @@ namespace GreenGoblin.WindowsForm
                 TimeEntryModel model = dgvr.DataBoundItem as TimeEntryModel;
                 selectedModels.Add(model);
             }
+
             _viewModel.UpdateSelectedModels(selectedModels);
         }
 
@@ -175,6 +182,14 @@ namespace GreenGoblin.WindowsForm
 
             _viewModel.StartLoading();
             _worker.RunWorkerAsync();
+        }
+
+        private void txtCategory_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void txtDescription_TextChanged(object sender, EventArgs e)
+        {
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)

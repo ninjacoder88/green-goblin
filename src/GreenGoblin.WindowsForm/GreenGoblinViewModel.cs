@@ -54,6 +54,16 @@ namespace GreenGoblin.WindowsForm
 
         public List<TimeEntryModel> SelectedTimeEntryModels => _selectedTimeEntryModels ?? (_selectedTimeEntryModels = new List<TimeEntryModel>());
 
+        public string TaskCategory
+        {
+            get => _taskCategory;
+            set
+            {
+                _taskCategory = value;
+                OnPropertyChanged(nameof(TaskCategory));
+            }
+        }
+
         public string TaskDescription
         {
             get => _taskDescription;
@@ -166,6 +176,7 @@ namespace GreenGoblin.WindowsForm
         public void StartBreak()
         {
             TaskDescription = "ON BREAK";
+            TaskCategory = "Off the Clock";
             StartTask();
             SaveBackup();
         }
@@ -178,6 +189,7 @@ namespace GreenGoblin.WindowsForm
         public void StartLunch()
         {
             TaskDescription = "LUNCH";
+            TaskCategory = "Off the Clock";
             StartTask();
             SaveBackup();
         }
@@ -194,9 +206,10 @@ namespace GreenGoblin.WindowsForm
                 ActiveModel.EndDateTime = DateTime.Now;
             }
 
-            var model = new TimeEntryModel(0, DateTime.Now, DateTime.MaxValue, TaskDescription, string.Empty);
+            var model = new TimeEntryModel(0, DateTime.Now, DateTime.MaxValue, TaskDescription, TaskCategory);
             TimeEntryModels.Add(model);
             TaskDescription = string.Empty;
+            TaskCategory = string.Empty;
             ActiveModel = model;
             PendingChanges = true;
 
@@ -239,6 +252,7 @@ namespace GreenGoblin.WindowsForm
         private void Reset()
         {
             TaskDescription = string.Empty;
+            TaskCategory = string.Empty;
             SelectedTaskTime = string.Empty;
             SelectedTimeEntryModels.Clear();
             TimeEntryModels.Clear();
@@ -299,5 +313,6 @@ namespace GreenGoblin.WindowsForm
         private string _taskDescription;
         private List<TimeEntry> _timeEntries = new List<TimeEntry>();
         private BindingList<TimeEntryModel> _timeEntryModel;
+        private string _taskCategory;
     }
 }
