@@ -11,12 +11,6 @@ namespace GreenGoblin.WindowsForm
                 return true;
             }
             return false;
-
-            //if (DateTime.MaxValue - dateTime < TimeSpan.FromSeconds(0))
-            //{
-            //    return true;
-            //}
-            //return false;
         }
     }
 }
