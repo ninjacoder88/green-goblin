@@ -220,7 +220,15 @@ namespace GreenGoblin.WindowsForm
                 total = total.Add(timeEntryModel.DurationTimeSpan);
             }
 
-            SelectedTaskTime = total.ToString("hh':'mm");
+            if (total.Days > 0)
+            {
+                var hours = (total.Days * 24) + total.Hours;
+                SelectedTaskTime = $"{hours}:{total.Minutes}";
+            }
+            else
+            {
+                SelectedTaskTime = total.ToString("hh':'mm");
+            }
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
