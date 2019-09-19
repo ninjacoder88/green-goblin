@@ -32,15 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.dgvTimeEntries = new System.Windows.Forms.DataGridView();
-            this.startTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.endTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.categoryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.durationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.durationTimeSpanDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.endDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.startDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.timeEntryModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.btnStart = new System.Windows.Forms.Button();
             this.btnBreak = new System.Windows.Forms.Button();
             this.btnLunch = new System.Windows.Forms.Button();
@@ -54,11 +45,21 @@
             this.panelButtons = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.txtCategory = new System.Windows.Forms.TextBox();
+            this.startTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.endTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.categoryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.durationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.durationTimeSpanDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.endDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.startDateTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timeEntryModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panelButtons.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // txtDescription
@@ -67,7 +68,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDescription.Location = new System.Drawing.Point(3, 3);
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(864, 23);
+            this.txtDescription.Size = new System.Drawing.Size(414, 23);
             this.txtDescription.TabIndex = 0;
             // 
             // dgvTimeEntries
@@ -100,73 +101,6 @@
             this.dgvTimeEntries.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTimeEntries_CellDoubleClick);
             this.dgvTimeEntries.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvTimeEntries_CellFormatting);
             this.dgvTimeEntries.SelectionChanged += new System.EventHandler(this.dgvTimeEntries_SelectionChanged);
-            // 
-            // startTimeDataGridViewTextBoxColumn
-            // 
-            this.startTimeDataGridViewTextBoxColumn.DataPropertyName = "StartTime";
-            this.startTimeDataGridViewTextBoxColumn.FillWeight = 200F;
-            this.startTimeDataGridViewTextBoxColumn.HeaderText = "Start Time";
-            this.startTimeDataGridViewTextBoxColumn.Name = "startTimeDataGridViewTextBoxColumn";
-            this.startTimeDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // endTimeDataGridViewTextBoxColumn
-            // 
-            this.endTimeDataGridViewTextBoxColumn.DataPropertyName = "EndTime";
-            this.endTimeDataGridViewTextBoxColumn.FillWeight = 200F;
-            this.endTimeDataGridViewTextBoxColumn.HeaderText = "End Time";
-            this.endTimeDataGridViewTextBoxColumn.Name = "endTimeDataGridViewTextBoxColumn";
-            this.endTimeDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // descriptionDataGridViewTextBoxColumn
-            // 
-            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
-            this.descriptionDataGridViewTextBoxColumn.FillWeight = 300F;
-            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
-            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // categoryDataGridViewTextBoxColumn
-            // 
-            this.categoryDataGridViewTextBoxColumn.DataPropertyName = "Category";
-            this.categoryDataGridViewTextBoxColumn.FillWeight = 200F;
-            this.categoryDataGridViewTextBoxColumn.HeaderText = "Category";
-            this.categoryDataGridViewTextBoxColumn.Name = "categoryDataGridViewTextBoxColumn";
-            this.categoryDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // durationDataGridViewTextBoxColumn
-            // 
-            this.durationDataGridViewTextBoxColumn.DataPropertyName = "Duration";
-            this.durationDataGridViewTextBoxColumn.HeaderText = "Duration";
-            this.durationDataGridViewTextBoxColumn.Name = "durationDataGridViewTextBoxColumn";
-            this.durationDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // durationTimeSpanDataGridViewTextBoxColumn
-            // 
-            this.durationTimeSpanDataGridViewTextBoxColumn.DataPropertyName = "DurationTimeSpan";
-            this.durationTimeSpanDataGridViewTextBoxColumn.HeaderText = "DurationTimeSpan";
-            this.durationTimeSpanDataGridViewTextBoxColumn.Name = "durationTimeSpanDataGridViewTextBoxColumn";
-            this.durationTimeSpanDataGridViewTextBoxColumn.ReadOnly = true;
-            this.durationTimeSpanDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // endDateTimeDataGridViewTextBoxColumn
-            // 
-            this.endDateTimeDataGridViewTextBoxColumn.DataPropertyName = "EndDateTime";
-            this.endDateTimeDataGridViewTextBoxColumn.HeaderText = "EndDateTime";
-            this.endDateTimeDataGridViewTextBoxColumn.Name = "endDateTimeDataGridViewTextBoxColumn";
-            this.endDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
-            this.endDateTimeDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // startDateTimeDataGridViewTextBoxColumn
-            // 
-            this.startDateTimeDataGridViewTextBoxColumn.DataPropertyName = "StartDateTime";
-            this.startDateTimeDataGridViewTextBoxColumn.HeaderText = "StartDateTime";
-            this.startDateTimeDataGridViewTextBoxColumn.Name = "startDateTimeDataGridViewTextBoxColumn";
-            this.startDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
-            this.startDateTimeDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // timeEntryModelBindingSource
-            // 
-            this.timeEntryModelBindingSource.DataSource = typeof(GreenGoblin.WindowsForm.TimeEntryModel);
             // 
             // btnStart
             // 
@@ -270,7 +204,7 @@
             this.btnReconcile.Location = new System.Drawing.Point(9, 282);
             this.btnReconcile.Name = "btnReconcile";
             this.btnReconcile.Size = new System.Drawing.Size(122, 23);
-            this.btnReconcile.TabIndex = 8;
+            this.btnReconcile.TabIndex = 6;
             this.btnReconcile.Text = "Reconcile";
             this.btnReconcile.UseVisualStyleBackColor = false;
             this.btnReconcile.Click += new System.EventHandler(this.btnReconcile_Click);
@@ -284,7 +218,7 @@
             this.btnRefresh.Location = new System.Drawing.Point(9, 516);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(122, 23);
-            this.btnRefresh.TabIndex = 9;
+            this.btnRefresh.TabIndex = 8;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
@@ -298,7 +232,7 @@
             this.btnSave.Location = new System.Drawing.Point(9, 545);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(122, 23);
-            this.btnSave.TabIndex = 10;
+            this.btnSave.TabIndex = 9;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -321,6 +255,7 @@
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Controls.Add(this.txtCategory);
             this.panel2.Controls.Add(this.progressBar1);
             this.panel2.Controls.Add(this.txtDescription);
             this.panel2.Controls.Add(this.dgvTimeEntries);
@@ -337,6 +272,80 @@
             this.progressBar1.Size = new System.Drawing.Size(836, 23);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar1.TabIndex = 2;
+            // 
+            // txtCategory
+            // 
+            this.txtCategory.Location = new System.Drawing.Point(423, 3);
+            this.txtCategory.Name = "txtCategory";
+            this.txtCategory.Size = new System.Drawing.Size(444, 23);
+            this.txtCategory.TabIndex = 1;
+            // 
+            // startTimeDataGridViewTextBoxColumn
+            // 
+            this.startTimeDataGridViewTextBoxColumn.DataPropertyName = "StartTime";
+            this.startTimeDataGridViewTextBoxColumn.FillWeight = 200F;
+            this.startTimeDataGridViewTextBoxColumn.HeaderText = "Start Time";
+            this.startTimeDataGridViewTextBoxColumn.Name = "startTimeDataGridViewTextBoxColumn";
+            this.startTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // endTimeDataGridViewTextBoxColumn
+            // 
+            this.endTimeDataGridViewTextBoxColumn.DataPropertyName = "EndTime";
+            this.endTimeDataGridViewTextBoxColumn.FillWeight = 200F;
+            this.endTimeDataGridViewTextBoxColumn.HeaderText = "End Time";
+            this.endTimeDataGridViewTextBoxColumn.Name = "endTimeDataGridViewTextBoxColumn";
+            this.endTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
+            this.descriptionDataGridViewTextBoxColumn.FillWeight = 300F;
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // categoryDataGridViewTextBoxColumn
+            // 
+            this.categoryDataGridViewTextBoxColumn.DataPropertyName = "Category";
+            this.categoryDataGridViewTextBoxColumn.FillWeight = 200F;
+            this.categoryDataGridViewTextBoxColumn.HeaderText = "Category";
+            this.categoryDataGridViewTextBoxColumn.Name = "categoryDataGridViewTextBoxColumn";
+            this.categoryDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // durationDataGridViewTextBoxColumn
+            // 
+            this.durationDataGridViewTextBoxColumn.DataPropertyName = "Duration";
+            this.durationDataGridViewTextBoxColumn.HeaderText = "Duration";
+            this.durationDataGridViewTextBoxColumn.Name = "durationDataGridViewTextBoxColumn";
+            this.durationDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // durationTimeSpanDataGridViewTextBoxColumn
+            // 
+            this.durationTimeSpanDataGridViewTextBoxColumn.DataPropertyName = "DurationTimeSpan";
+            this.durationTimeSpanDataGridViewTextBoxColumn.HeaderText = "DurationTimeSpan";
+            this.durationTimeSpanDataGridViewTextBoxColumn.Name = "durationTimeSpanDataGridViewTextBoxColumn";
+            this.durationTimeSpanDataGridViewTextBoxColumn.ReadOnly = true;
+            this.durationTimeSpanDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // endDateTimeDataGridViewTextBoxColumn
+            // 
+            this.endDateTimeDataGridViewTextBoxColumn.DataPropertyName = "EndDateTime";
+            this.endDateTimeDataGridViewTextBoxColumn.HeaderText = "EndDateTime";
+            this.endDateTimeDataGridViewTextBoxColumn.Name = "endDateTimeDataGridViewTextBoxColumn";
+            this.endDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            this.endDateTimeDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // startDateTimeDataGridViewTextBoxColumn
+            // 
+            this.startDateTimeDataGridViewTextBoxColumn.DataPropertyName = "StartDateTime";
+            this.startDateTimeDataGridViewTextBoxColumn.HeaderText = "StartDateTime";
+            this.startDateTimeDataGridViewTextBoxColumn.Name = "startDateTimeDataGridViewTextBoxColumn";
+            this.startDateTimeDataGridViewTextBoxColumn.ReadOnly = true;
+            this.startDateTimeDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // timeEntryModelBindingSource
+            // 
+            this.timeEntryModelBindingSource.DataSource = typeof(GreenGoblin.WindowsForm.TimeEntryModel);
             // 
             // MainForm
             // 
@@ -355,12 +364,12 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panelButtons.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -391,6 +400,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn endDateTimeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn startDateTimeDataGridViewTextBoxColumn;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.TextBox txtCategory;
     }
 }
 
