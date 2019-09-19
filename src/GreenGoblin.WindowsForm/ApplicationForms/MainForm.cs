@@ -36,6 +36,18 @@ namespace GreenGoblin.WindowsForm
             _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
         }
 
+        private void btnArchive_Click(object sender, EventArgs e)
+        {
+            using (var form = new PromptForm())
+            {
+                var dialogResult = form.ShowDialog();
+                if (dialogResult == DialogResult.OK)
+                {
+                    _viewModel.Archive(form.UserInput);
+                }
+            }
+        }
+
         private void btnBreak_Click(object sender, EventArgs e)
         {
             _viewModel.StartBreak();

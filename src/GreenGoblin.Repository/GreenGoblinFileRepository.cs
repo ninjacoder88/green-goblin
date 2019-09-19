@@ -8,10 +8,33 @@ namespace GreenGoblin.Repository
 {
     public class GreenGoblinFileRepository : IGreenGoblinRepository
     {
-        public GreenGoblinFileRepository(string filePath, string backupFilePath)
+        public GreenGoblinFileRepository(string directory)
         {
-            _filePath = filePath;
-            _backupFilePath = backupFilePath;
+            _directory = directory;
+            _filePath = Path.Combine(directory, "time.txt");
+            _backupFilePath = Path.Combine(directory, "time.backup.txt");
+        }
+
+        public void Archive(IEnumerable<TimeEntry> timeEntries, string fileName)
+        {
+            var fileLines = new List<string>();
+            var timeEntryList = timeEntries.ToList();
+
+            int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
+
+            foreach (var timeEntry in timeEntryList)
+            {
+                if (timeEntry.TimeEntryId == 0)
+                {
+                    var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
+                    prop.SetValue(timeEntry, nextId++);
+                }
+
+                fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+            }
+
+            string archiveFilePath = Path.Combine(_directory, $"{fileName}.txt");
+            File.WriteAllLines(archiveFilePath, fileLines);
         }
 
         public bool CheckBackupFile()
@@ -112,7 +135,8 @@ namespace GreenGoblin.Repository
             return timeEntries;
         }
 
-        private readonly string _filePath;
         private readonly string _backupFilePath;
+        private readonly string _directory;
+        private readonly string _filePath;
     }
 }

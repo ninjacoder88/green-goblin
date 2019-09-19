@@ -6,6 +6,10 @@ namespace GreenGoblin.Repository
 {
     public class TestingRepository : IGreenGoblinRepository
     {
+        public void Archive(IEnumerable<TimeEntry> timeEntries, string fileName)
+        {
+        }
+
         public bool CheckBackupFile()
         {
             return false;

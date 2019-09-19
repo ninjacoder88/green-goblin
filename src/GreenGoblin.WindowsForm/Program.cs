@@ -12,11 +12,12 @@ namespace GreenGoblin.WindowsForm
         [STAThread]
         static void Main()
         {
-            const string PrimaryTimeFilePath = @"C:\computer\development\time\time.txt";
-            const string BackupTimeFilePath = @"C:\computer\development\time\time.backup.txt";
+            //const string PrimaryTimeFilePath = @"C:\computer\development\time\time.txt";
+            //const string BackupTimeFilePath = @"C:\computer\development\time\time.backup.txt";
+            const string TimeFilesDirectory = @"C:\computer\development\time";
 
             IGreenGoblinRepository repository = new TestingRepository();
-            IGreenGoblinRepository fileRepository = new GreenGoblinFileRepository(PrimaryTimeFilePath, BackupTimeFilePath);
+            IGreenGoblinRepository fileRepository = new GreenGoblinFileRepository(TimeFilesDirectory);
             var viewModel = new GreenGoblinViewModel(fileRepository);
 
             Application.EnableVisualStyles();

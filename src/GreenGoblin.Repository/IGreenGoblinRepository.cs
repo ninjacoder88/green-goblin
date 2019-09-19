@@ -4,6 +4,8 @@ namespace GreenGoblin.Repository
 {
     public interface IGreenGoblinRepository
     {
+        void Archive(IEnumerable<TimeEntry> timeEntries, string fileName);
+
         bool CheckBackupFile();
 
         IEnumerable<TimeEntry> LoadBackupTime();

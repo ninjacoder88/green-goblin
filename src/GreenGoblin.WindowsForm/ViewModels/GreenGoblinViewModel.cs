@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Forms;
 using GreenGoblin.Repository;
 
 namespace GreenGoblin.WindowsForm
@@ -84,6 +85,17 @@ namespace GreenGoblin.WindowsForm
                 _activeModel = value;
                 OnPropertyChanged(nameof(ActiveModelOpen));
             }
+        }
+
+        public void Archive(string fileName)
+        {
+            var timeEntries = new List<TimeEntry>();
+            foreach (var timeEntryModel in SelectedTimeEntryModels)
+            {
+                timeEntries.Add(new TimeEntry(timeEntryModel.Id, timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
+            }
+
+            _repository.Archive(timeEntries, fileName);
         }
 
         public bool CheckBackupFile()
