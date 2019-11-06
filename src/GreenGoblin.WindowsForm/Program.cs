@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.IO;
 using System.Windows.Forms;
 using GreenGoblin.Repository;
 
@@ -12,12 +14,14 @@ namespace GreenGoblin.WindowsForm
         [STAThread]
         static void Main()
         {
-            //const string PrimaryTimeFilePath = @"C:\computer\development\time\time.txt";
-            //const string BackupTimeFilePath = @"C:\computer\development\time\time.backup.txt";
-            const string TimeFilesDirectory = @"C:\computer\development\time";
+            var directory = ConfigurationManager.AppSettings["TimeFileLocation"];
+            if (!Directory.Exists(directory))
+            {
+                throw new Exception("Invalid Directory. Please verify directory in configuration exists");
+            }
 
             IGreenGoblinRepository repository = new TestingRepository();
-            IGreenGoblinRepository fileRepository = new GreenGoblinFileRepository(TimeFilesDirectory);
+            IGreenGoblinRepository fileRepository = new GreenGoblinFileRepository(directory);
             var viewModel = new GreenGoblinViewModel(fileRepository);
 
             Application.EnableVisualStyles();
