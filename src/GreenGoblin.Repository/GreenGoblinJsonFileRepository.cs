@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using GreenGoblin.Repository.Entities;
 using GreenGoblin.Repository.Models;
 using Newtonsoft.Json;
@@ -11,43 +9,58 @@ namespace GreenGoblin.Repository
 {
     public class GreenGoblinJsonFileRepository
     {
-        private readonly string _directory;
-        private string _currentTasksFilePath;
-        private string _backupTasksFilePath;
-
-        private string _categoriesFilePath;
-
-
         public GreenGoblinJsonFileRepository(string directory)
         {
             _directory = directory;
-            _currentTasksFilePath = Path.Combine(directory, "greengoblin.json");
-            _backupTasksFilePath = Path.Combine(directory, "greengoblin.backup.json");
+            _currentTasksFilePath = Path.Combine(directory, "gg-tasks.json");
+            _categoriesFilePath = Path.Combine(directory, "gg-categories.json");
+            //_backupTasksFilePath = Path.Combine(directory, "greengoblin.backup.json");
         }
 
         public IEnumerable<TaskModel> LoadCurrentTasks()
         {
-            return Load(_currentTasksFilePath);
+            return LoadTasks(_currentTasksFilePath);
         }
 
-        public IEnumerable<TaskModel> LoadBackupTasks()
+        public IEnumerable<CategoryModel> LoadCategories()
         {
-            return Load(_backupTasksFilePath);
+            return LoadCategories(_categoriesFilePath);
         }
 
-        public void Save(IEnumerable<TaskModel> taskModels)
+        public void SaveCategories(IEnumerable<CategoryModel> categoryModels)
+        {
+            var categoryModelList = categoryModels.ToList();
+
+            int nextId = categoryModelList.Max(x => x.CategoryId) + 1;
+
+            var entities = new List<CategoryModel>();
+            foreach (var categoryModel in categoryModelList)
+            {
+                entities.Add(new CategoryModel
+                                 {
+                                     CategoryId = categoryModel.CategoryId == 0 ? nextId++ : categoryModel.CategoryId,
+                                     CategoryName = categoryModel.CategoryName
+                                 });
+            }
+
+            var fileText = JsonConvert.SerializeObject(entities);
+
+            File.WriteAllText(_categoriesFilePath, fileText);
+        }
+
+        public void SaveTasks(IEnumerable<TaskModel> taskModels)
         {
             var taskModelsList = taskModels.ToList();
 
             int nextId = taskModelsList.Max(x => x.TaskId) + 1;
 
-            List<TaskEntity> entities = new List<TaskEntity>();
+            var entities = new List<TaskEntity>();
             foreach (var taskModel in taskModelsList)
             {
-                entities.Add(new TaskEntity()
+                entities.Add(new TaskEntity
                                  {
                                      Description = taskModel.Description,
-                                     TaskId = 1,
+                                     TaskId = taskModel.TaskId == 0 ? nextId++ : taskModel.TaskId,
                                      EndDateTime = taskModel.EndDateTime,
                                      StartDateTime = taskModel.StartDateTime,
                                      Archived = taskModel.Archived,
@@ -59,10 +72,28 @@ namespace GreenGoblin.Repository
             var fileText = JsonConvert.SerializeObject(entities);
 
             File.WriteAllText(_currentTasksFilePath, fileText);
-            File.Delete(_backupTasksFilePath);
+            //File.Delete(_backupTasksFilePath);
         }
 
-        private IEnumerable<TaskModel> Load(string filePath)
+        private IEnumerable<CategoryModel> LoadCategories(string filePath)
+        {
+            string fileText = LoadOrCreate(filePath);
+            var categoryEntities = JsonConvert.DeserializeObject<List<CategoryEntity>>(fileText);
+
+            var models = new List<CategoryModel>();
+            foreach (var categoryEntity in categoryEntities)
+            {
+                models.Add(new CategoryModel
+                               {
+                                   CategoryName = categoryEntity.CategoryName,
+                                   CategoryId = categoryEntity.CategoryId
+                               });
+            }
+
+            return models;
+        }
+
+        private string LoadOrCreate(string filePath)
         {
             if (!File.Exists(filePath))
             {
@@ -72,13 +103,18 @@ namespace GreenGoblin.Repository
                 }
             }
 
-            string fileText = File.ReadAllText(filePath);
+            return File.ReadAllText(filePath);
+        }
+
+        private IEnumerable<TaskModel> LoadTasks(string filePath)
+        {
+            string fileText = LoadOrCreate(filePath);
             var taskEntities = JsonConvert.DeserializeObject<List<TaskEntity>>(fileText);
 
             var models = new List<TaskModel>();
             foreach (var taskEntity in taskEntities)
             {
-                models.Add(new TaskModel()
+                models.Add(new TaskModel
                                {
                                    Archived = taskEntity.Archived,
                                    Category = taskEntity.Category,
@@ -92,5 +128,9 @@ namespace GreenGoblin.Repository
 
             return models;
         }
+
+        private string _categoriesFilePath;
+        private readonly string _currentTasksFilePath;
+        private readonly string _directory;
     }
 }

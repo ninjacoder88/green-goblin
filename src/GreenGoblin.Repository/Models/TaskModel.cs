@@ -4,7 +4,7 @@ namespace GreenGoblin.Repository.Models
 {
     public class TaskModel
     {
-        public int TaskId { get; set; }
+        public int TaskId { get; internal set; }
 
         public DateTime StartDateTime { get; set; }
 
