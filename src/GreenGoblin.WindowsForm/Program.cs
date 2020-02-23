@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using GreenGoblin.Repository;
@@ -14,6 +15,15 @@ namespace GreenGoblin.WindowsForm
         [STAThread]
         static void Main()
         {
+            bool result;
+            var mutex = new System.Threading.Mutex(true, "GreenGoblin", out result);
+
+            if (!result)
+            {
+                MessageBox.Show("Another instance is already running.");
+                return;
+            }
+
             var directory = ConfigurationManager.AppSettings["TimeFileLocation"];
             if (!Directory.Exists(directory))
             {
@@ -27,6 +37,8 @@ namespace GreenGoblin.WindowsForm
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm(viewModel));
+
+            GC.KeepAlive(mutex);
         }
     }
 }

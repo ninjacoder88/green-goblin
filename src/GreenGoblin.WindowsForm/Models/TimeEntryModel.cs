@@ -42,7 +42,7 @@ namespace GreenGoblin.WindowsForm
 
         public DateTime EndDateTime
         {
-            get { return _endDateTime; }
+            get => _endDateTime;
             set
             {
                 _endDateTime = value;
@@ -58,7 +58,7 @@ namespace GreenGoblin.WindowsForm
 
         public bool OverlapWarning
         {
-            get { return _overlapWarning; }
+            get => _overlapWarning;
             set
             {
                 if (value == _overlapWarning)
@@ -72,7 +72,7 @@ namespace GreenGoblin.WindowsForm
 
         public bool Reconciled
         {
-            get { return _reconciled; }
+            get => _reconciled;
             set
             {
                 _reconciled = value;
