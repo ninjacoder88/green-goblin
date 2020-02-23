@@ -88,6 +88,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Properties\DataSources\GreenGoblin.Repository.Models.CategoryModel.datasource" />
     <None Include="Properties\DataSources\TimeEntryModel.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

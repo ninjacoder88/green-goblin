@@ -58,13 +58,17 @@
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDataRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDataSave = new System.Windows.Forms.ToolStripMenuItem();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lbxCategories = new System.Windows.Forms.ListBox();
+            this.categoryModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.lblTaskTime = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.categoryModelBindingSource)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtDescription
@@ -311,31 +315,36 @@
             this.tsmiDataSave.Size = new System.Drawing.Size(138, 22);
             this.tsmiDataSave.Text = "&Save";
             // 
-            // listBox1
+            // lbxCategories
             // 
-            this.listBox1.BackColor = System.Drawing.Color.DarkGreen;
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.ForeColor = System.Drawing.Color.White;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 15;
-            this.listBox1.Items.AddRange(new object[] {
-            "Administration",
-            "cBlocks",
-            "Support"});
-            this.listBox1.Location = new System.Drawing.Point(1269, 3);
-            this.listBox1.Name = "listBox1";
-            this.tableLayoutPanel1.SetRowSpan(this.listBox1, 2);
-            this.listBox1.Size = new System.Drawing.Size(121, 219);
-            this.listBox1.TabIndex = 15;
+            this.lbxCategories.BackColor = System.Drawing.Color.DarkGreen;
+            this.lbxCategories.DataSource = this.categoryModelBindingSource;
+            this.lbxCategories.DisplayMember = "CategoryName";
+            this.lbxCategories.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbxCategories.ForeColor = System.Drawing.Color.White;
+            this.lbxCategories.FormattingEnabled = true;
+            this.lbxCategories.ItemHeight = 15;
+            this.lbxCategories.Location = new System.Drawing.Point(1269, 3);
+            this.lbxCategories.Name = "lbxCategories";
+            this.tableLayoutPanel1.SetRowSpan(this.lbxCategories, 2);
+            this.lbxCategories.Size = new System.Drawing.Size(121, 219);
+            this.lbxCategories.TabIndex = 15;
+            this.lbxCategories.ValueMember = "CategoryId";
+            // 
+            // categoryModelBindingSource
+            // 
+            this.categoryModelBindingSource.DataSource = typeof(GreenGoblin.Repository.Models.CategoryModel);
             // 
             // lblTaskTime
             // 
             this.lblTaskTime.AutoSize = true;
-            this.lblTaskTime.Location = new System.Drawing.Point(1269, 627);
+            this.lblTaskTime.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTaskTime.ForeColor = System.Drawing.Color.White;
+            this.lblTaskTime.Location = new System.Drawing.Point(35, 10);
             this.lblTaskTime.Name = "lblTaskTime";
-            this.lblTaskTime.Size = new System.Drawing.Size(42, 15);
+            this.lblTaskTime.Size = new System.Drawing.Size(45, 19);
             this.lblTaskTime.TabIndex = 17;
-            this.lblTaskTime.Text = "label1";
+            this.lblTaskTime.Text = "00:00";
             // 
             // tableLayoutPanel1
             // 
@@ -347,8 +356,8 @@
             this.tableLayoutPanel1.Controls.Add(this.txtCategory, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.dgvTimeEntries, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.txtDescription, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.listBox1, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.lblTaskTime, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lbxCategories, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 2, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -359,6 +368,14 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1393, 652);
             this.tableLayoutPanel1.TabIndex = 18;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.lblTaskTime);
+            this.panel1.Location = new System.Drawing.Point(1269, 228);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(121, 36);
+            this.panel1.TabIndex = 18;
             // 
             // MainForm
             // 
@@ -380,8 +397,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.categoryModelBindingSource)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,9 +435,11 @@
         private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tsmiDataRefresh;
         private System.Windows.Forms.ToolStripMenuItem tsmiDataSave;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lbxCategories;
         private System.Windows.Forms.Label lblTaskTime;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.BindingSource categoryModelBindingSource;
     }
 }
 

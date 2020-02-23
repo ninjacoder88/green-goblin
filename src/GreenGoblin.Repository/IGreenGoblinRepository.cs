@@ -1,19 +1,22 @@
 ﻿using System.Collections.Generic;
+using GreenGoblin.Repository.Models;
 
 namespace GreenGoblin.Repository
 {
     public interface IGreenGoblinRepository
     {
-        void Archive(IEnumerable<TimeEntry> timeEntries, string fileName);
+        void Archive(IEnumerable<TaskModel> timeEntries, string fileName);
 
         bool CheckBackupFile();
 
-        IEnumerable<TimeEntry> LoadBackupTime();
+        IEnumerable<TaskModel> LoadBackupTime();
 
-        IEnumerable<TimeEntry> LoadTime();
+        IEnumerable<CategoryModel> LoadCategories();
 
-        void Save(IEnumerable<TimeEntry> timeEntries);
+        IEnumerable<TaskModel> LoadTime();
 
-        void SaveBackup(IEnumerable<TimeEntry> timeEntries);
+        void Save(IEnumerable<TaskModel> timeEntries);
+
+        void SaveBackup(IEnumerable<TaskModel> timeEntries);
     }
 }

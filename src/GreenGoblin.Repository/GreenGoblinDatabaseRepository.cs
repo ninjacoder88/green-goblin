@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using GreenGoblin.Repository.Models;
 
 namespace GreenGoblin.Repository
 {
     public class GreenGoblinDatabaseRepository : IGreenGoblinRepository
     {
-        public void Archive(IEnumerable<TimeEntry> timeEntries, string fileName)
+        public void Archive(IEnumerable<TaskModel> timeEntries, string fileName)
         {
         }
 
@@ -13,21 +14,26 @@ namespace GreenGoblin.Repository
             return false;
         }
 
-        public IEnumerable<TimeEntry> LoadBackupTime()
+        public IEnumerable<TaskModel> LoadBackupTime()
         {
             yield break;
         }
 
-        public IEnumerable<TimeEntry> LoadTime()
+        public IEnumerable<CategoryModel> LoadCategories()
         {
             yield break;
         }
 
-        public void Save(IEnumerable<TimeEntry> timeEntries)
+        public IEnumerable<TaskModel> LoadTime()
+        {
+            yield break;
+        }
+
+        public void Save(IEnumerable<TaskModel> timeEntries)
         {
         }
 
-        public void SaveBackup(IEnumerable<TimeEntry> timeEntries)
+        public void SaveBackup(IEnumerable<TaskModel> timeEntries)
         {
         }
     }

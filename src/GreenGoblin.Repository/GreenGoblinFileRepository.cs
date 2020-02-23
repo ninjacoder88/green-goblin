@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using GreenGoblin.Repository.Models;
 
 namespace GreenGoblin.Repository
 {
@@ -13,24 +13,21 @@ namespace GreenGoblin.Repository
             _directory = directory;
             _filePath = Path.Combine(directory, "time.txt");
             _backupFilePath = Path.Combine(directory, "time.backup.txt");
+            _categoriesFilePath = Path.Combine(directory, "categories.txt");
         }
 
-        public void Archive(IEnumerable<TimeEntry> timeEntries, string fileName)
+        public void Archive(IEnumerable<TaskModel> timeEntries, string fileName)
         {
             var fileLines = new List<string>();
             var timeEntryList = timeEntries.ToList();
 
-            int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
+            int nextId = timeEntryList.Max(x => x.TaskId) + 1;
 
             foreach (var timeEntry in timeEntryList)
             {
-                if (timeEntry.TimeEntryId == 0)
-                {
-                    var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
-                    prop.SetValue(timeEntry, nextId++);
-                }
+                int id = timeEntry.TaskId == 0 ? nextId++ : timeEntry.TaskId;
 
-                fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+                fileLines.Add($"{id},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
             }
 
             string archiveFilePath = Path.Combine(_directory, $"{fileName}.txt");
@@ -42,34 +39,52 @@ namespace GreenGoblin.Repository
             return File.Exists(_backupFilePath);
         }
 
-        public IEnumerable<TimeEntry> LoadBackupTime()
+        public IEnumerable<TaskModel> LoadBackupTime()
         {
             return Load(_backupFilePath);
         }
 
-        public IEnumerable<TimeEntry> LoadTime()
+        public IEnumerable<CategoryModel> LoadCategories()
+        {
+            var fileLines = LoadOrCreate(_categoriesFilePath);
+
+            var categoryModels = new List<CategoryModel>();
+            foreach (var fileLine in fileLines)
+            {
+                var splitFileLine = fileLine.Split(new[] {","}, StringSplitOptions.None);
+
+                var id = int.Parse(splitFileLine[0]);
+                var name = splitFileLine[1];
+
+                categoryModels.Add(new CategoryModel
+                                       {
+                                           CategoryId = id,
+                                           CategoryName = name
+                                       });
+            }
+
+            return categoryModels;
+        }
+
+        public IEnumerable<TaskModel> LoadTime()
         {
             return Load(_filePath);
         }
 
-        public void Save(IEnumerable<TimeEntry> timeEntries)
+        public void Save(IEnumerable<TaskModel> timeEntries)
         {
             var fileLines = new List<string>();
             var timeEntryList = timeEntries.ToList();
 
             if (timeEntryList.Any())
             {
-                int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
+                int nextId = timeEntryList.Max(x => x.TaskId) + 1;
 
                 foreach (var timeEntry in timeEntryList)
                 {
-                    if (timeEntry.TimeEntryId == 0)
-                    {
-                        var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
-                        prop.SetValue(timeEntry, nextId++);
-                    }
+                    int id = timeEntry.TaskId == 0 ? nextId++ : timeEntry.TaskId;
 
-                    fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+                    fileLines.Add($"{id},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
                 }
             }
 
@@ -77,7 +92,7 @@ namespace GreenGoblin.Repository
             File.Delete(_backupFilePath);
         }
 
-        public void SaveBackup(IEnumerable<TimeEntry> timeEntries)
+        public void SaveBackup(IEnumerable<TaskModel> timeEntries)
         {
             if (!File.Exists(_backupFilePath))
             {
@@ -90,34 +105,24 @@ namespace GreenGoblin.Repository
 
             if (timeEntryList.Any())
             {
-                int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
+                int nextId = timeEntryList.Max(x => x.TaskId) + 1;
 
                 foreach (var timeEntry in timeEntryList)
                 {
-                    if (timeEntry.TimeEntryId == 0)
-                    {
-                        var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
-                        prop.SetValue(timeEntry, nextId++);
-                    }
+                    int id = timeEntry.TaskId == 0 ? nextId++ : timeEntry.TaskId;
 
-                    fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+                    fileLines.Add($"{id},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
                 }
             }
 
             File.WriteAllLines(_backupFilePath, fileLines);
         }
 
-        private IEnumerable<TimeEntry> Load(string filePath)
+        private IEnumerable<TaskModel> Load(string filePath)
         {
-            if (!File.Exists(filePath))
-            {
-                var stream = File.Create(filePath);
-                stream.Close();
-            }
+            var fileLines = LoadOrCreate(filePath);
 
-            var fileLines = File.ReadAllLines(filePath).ToList();
-
-            var timeEntries = new List<TimeEntry>();
+            var timeEntries = new List<TaskModel>();
 
             foreach (var fileLine in fileLines)
             {
@@ -135,13 +140,32 @@ namespace GreenGoblin.Repository
                     parsedEndTime = DateTime.Parse(endTime);
                 }
 
-                timeEntries.Add(new TimeEntry(id, startTime, parsedEndTime, description, category));
+                timeEntries.Add(new TaskModel
+                                    {
+                                        TaskId = id,
+                                        StartDateTime = startTime,
+                                        EndDateTime = parsedEndTime,
+                                        Description = description,
+                                        Category = category
+                                    });
             }
 
             return timeEntries;
         }
 
+        private List<string> LoadOrCreate(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                var stream = File.Create(filePath);
+                stream.Close();
+            }
+
+            return File.ReadAllLines(filePath).ToList();
+        }
+
         private readonly string _backupFilePath;
+        private readonly string _categoriesFilePath;
         private readonly string _directory;
         private readonly string _filePath;
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using GreenGoblin.Repository.Models;
 
 namespace GreenGoblin.WindowsForm
 {
@@ -13,6 +14,9 @@ namespace GreenGoblin.WindowsForm
             InitializeComponent();
 
             dgvTimeEntries.DataSource = viewModel.TimeEntryModels;
+            lbxCategories.DataSource = viewModel.Categories;
+
+            lbxCategories.SelectedIndexChanged += LbxCategories_SelectedIndexChanged;
 
             txtDescription.DataBindings.Add(nameof(txtDescription.Text), _viewModel, nameof(_viewModel.TaskDescription));
             txtDescription.DataBindings.Add(nameof(txtDescription.Enabled), _viewModel, nameof(_viewModel.NotLoading));
@@ -34,6 +38,13 @@ namespace GreenGoblin.WindowsForm
             tmsiTaskStart.Click += Start_Event;
 
             _viewModel.Question += ViewModel_Question;
+        }
+
+        private void LbxCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var model = lbxCategories.SelectedItem as CategoryModel;
+            _viewModel.SelectedCategory = model;
+            txtCategory.Text = model.CategoryName;
         }
 
         private void Archive_Event(object sender, EventArgs e)
