@@ -57,17 +57,20 @@ namespace GreenGoblin.Repository
             var fileLines = new List<string>();
             var timeEntryList = timeEntries.ToList();
 
-            int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
-
-            foreach (var timeEntry in timeEntryList)
+            if (timeEntryList.Any())
             {
-                if (timeEntry.TimeEntryId == 0)
-                {
-                    var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
-                    prop.SetValue(timeEntry, nextId++);
-                }
+                int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
 
-                fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+                foreach (var timeEntry in timeEntryList)
+                {
+                    if (timeEntry.TimeEntryId == 0)
+                    {
+                        var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
+                        prop.SetValue(timeEntry, nextId++);
+                    }
+
+                    fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+                }
             }
 
             File.WriteAllLines(_filePath, fileLines);
@@ -85,17 +88,20 @@ namespace GreenGoblin.Repository
             var fileLines = new List<string>();
             var timeEntryList = timeEntries.ToList();
 
-            int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
-
-            foreach (var timeEntry in timeEntryList)
+            if (timeEntryList.Any())
             {
-                if (timeEntry.TimeEntryId == 0)
-                {
-                    var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
-                    prop.SetValue(timeEntry, nextId++);
-                }
+                int nextId = timeEntryList.Max(x => x.TimeEntryId) + 1;
 
-                fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+                foreach (var timeEntry in timeEntryList)
+                {
+                    if (timeEntry.TimeEntryId == 0)
+                    {
+                        var prop = timeEntry.GetType().GetProperty("TimeEntryId", BindingFlags.Public | BindingFlags.Instance);
+                        prop.SetValue(timeEntry, nextId++);
+                    }
+
+                    fileLines.Add($"{timeEntry.TimeEntryId},{timeEntry.StartDateTime},{timeEntry.EndDateTime},{timeEntry.Description},{timeEntry.Category}");
+                }
             }
 
             File.WriteAllLines(_backupFilePath, fileLines);
