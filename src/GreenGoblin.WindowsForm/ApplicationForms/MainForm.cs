@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -25,18 +26,45 @@ namespace GreenGoblin.WindowsForm
 
             lblTaskTime.DataBindings.Add(nameof(lblTaskTime.Text), _viewModel, nameof(_viewModel.SelectedTaskTime));
             progressBar1.DataBindings.Add(nameof(progressBar1.Visible), _viewModel, nameof(_viewModel.Loading));
-            panelButtons.DataBindings.Add(nameof(panelButtons.Enabled), _viewModel, nameof(_viewModel.NotLoading));
+            //panelButtons.DataBindings.Add(nameof(panelButtons.Enabled), _viewModel, nameof(_viewModel.NotLoading));
 
-            btnSave.DataBindings.Add(nameof(btnSave.Enabled), _viewModel, nameof(_viewModel.PendingChanges));
-            btnEnd.DataBindings.Add(nameof(btnEnd.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
-            btnBreak.DataBindings.Add(nameof(btnBreak.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
-            btnLunch.DataBindings.Add(nameof(btnLunch.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
+            //btnSave.DataBindings.Add(nameof(btnSave.Enabled), _viewModel, nameof(_viewModel.PendingChanges));
+            //btnEnd.DataBindings.Add(nameof(btnEnd.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
+            //btnBreak.DataBindings.Add(nameof(btnBreak.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
+            //btnLunch.DataBindings.Add(nameof(btnLunch.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
+
+            //btnArchive.Click += Archive_Event;
+            tsmiManageArchive.Click += Archive_Event;
+
+            //btnBreak.Click += Break_Event;
+            tsmiTaskBreak.Click += Break_Event;
+
+            //btnEnd.Click += End_Event;
+            tsmiTaskEndDay.Click += End_Event;
+
+            //btnLunch.Click += Lunch_Event;
+            tsmiTaskLunch.Click += Lunch_Event;
+
+            //btnReconcile.Click += Reconcile_Event;
+            tsmiManageReconcile.Click += Reconcile_Event;
+
+            //btnRefresh.Click += Refresh_Event;
+            tsmiDataRefresh.Click += Refresh_Event;
+
+            //btnRemoveEntry.Click += Remove_Event;
+            tsmiManageDelete.Click += Remove_Event;
+
+            //btnSave.Click += Save_Event;
+            tsmiDataSave.Click += Save_Event;
+
+            //btnStart.Click += Start_Event;
+            tmsiTaskStart.Click += Start_Event;
 
             _worker.DoWork += Worker_DoWork;
             _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
         }
 
-        private void btnArchive_Click(object sender, EventArgs e)
+        private void Archive_Event(object sender, EventArgs e)
         {
             using (var form = new PromptForm())
             {
@@ -48,60 +76,9 @@ namespace GreenGoblin.WindowsForm
             }
         }
 
-        private void btnBreak_Click(object sender, EventArgs e)
+        private void Break_Event(object sender, EventArgs e)
         {
             _viewModel.StartBreak();
-        }
-
-        private void btnEnd_Click(object sender, EventArgs e)
-        {
-            _viewModel.EndOfDay();
-        }
-
-        private void btnLunch_Click(object sender, EventArgs e)
-        {
-            _viewModel.StartLunch();
-        }
-
-        private void btnReconcile_Click(object sender, EventArgs e)
-        {
-            _viewModel.Reconcile();
-        }
-
-        private void btnRefresh_Click(object sender, EventArgs e)
-        {
-            if (_viewModel.PendingChanges)
-            {
-                var dialogResult = MessageBox.Show(this, "There are pending changes. Would you like to save?", "Pending Changed", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    _viewModel.Save();
-                }
-            }
-
-            StartLoading();
-        }
-
-        private void btnRemoveEntry_Click(object sender, EventArgs e)
-        {
-            var dialogResult = MessageBox.Show(this, "Are you sure you want to remove the selected entries?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (dialogResult != DialogResult.Yes)
-            {
-                return;
-            }
-
-            _viewModel.RemoveEntry();
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            _viewModel.Save();
-        }
-
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            _viewModel.StartTask();
         }
 
         private void dgvTimeEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -130,12 +107,15 @@ namespace GreenGoblin.WindowsForm
 
             if (model.Reconciled)
             {
-                e.CellStyle.BackColor = Color.Green;
+                e.CellStyle.BackColor = Color.LightGreen;
+                e.CellStyle.ForeColor = Color.Black;
             }
 
             if (model.OverlapWarning)
             {
-                e.CellStyle.ForeColor = Color.Red;
+                //dgv.Rows[e.RowIndex].Cells[0].Style.BackColor = Color.Red;
+                //dgv.Rows[e.RowIndex+1].Cells[1].Style.BackColor = Color.Red;
+                e.CellStyle.BackColor = Color.Red;
             }
         }
 
@@ -159,6 +139,16 @@ namespace GreenGoblin.WindowsForm
             _viewModel.UpdateSelectedModels(selectedModels);
         }
 
+        private void End_Event(object sender, EventArgs e)
+        {
+            _viewModel.EndOfDay();
+        }
+
+        private void Lunch_Event(object sender, EventArgs e)
+        {
+            _viewModel.StartLunch();
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!_viewModel.PendingChanges)
@@ -179,6 +169,47 @@ namespace GreenGoblin.WindowsForm
         private void MainForm_Load(object sender, EventArgs e)
         {
             StartLoading();
+        }
+
+        private void Reconcile_Event(object sender, EventArgs e)
+        {
+            _viewModel.Reconcile();
+        }
+
+        private void Refresh_Event(object sender, EventArgs e)
+        {
+            if (_viewModel.PendingChanges)
+            {
+                var dialogResult = MessageBox.Show(this, "There are pending changes. Would you like to save?", "Pending Changed", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    _viewModel.Save();
+                }
+            }
+
+            StartLoading();
+        }
+
+        private void Remove_Event(object sender, EventArgs e)
+        {
+            var dialogResult = MessageBox.Show(this, "Are you sure you want to remove the selected entries?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (dialogResult != DialogResult.Yes)
+            {
+                return;
+            }
+
+            _viewModel.RemoveEntry();
+        }
+
+        private void Save_Event(object sender, EventArgs e)
+        {
+            _viewModel.Save();
+        }
+
+        private void Start_Event(object sender, EventArgs e)
+        {
+            _viewModel.StartTask();
         }
 
         private void StartLoading()
