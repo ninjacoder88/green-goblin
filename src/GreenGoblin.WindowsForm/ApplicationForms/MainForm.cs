@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -18,50 +16,24 @@ namespace GreenGoblin.WindowsForm
 
             txtDescription.DataBindings.Add(nameof(txtDescription.Text), _viewModel, nameof(_viewModel.TaskDescription));
             txtDescription.DataBindings.Add(nameof(txtDescription.Enabled), _viewModel, nameof(_viewModel.NotLoading));
-            txtDescription.TextChanged += txtDescription_TextChanged;
 
             txtCategory.DataBindings.Add(nameof(txtCategory.Text), _viewModel, nameof(_viewModel.TaskCategory));
             txtCategory.DataBindings.Add(nameof(txtCategory.Enabled), _viewModel, nameof(_viewModel.NotLoading));
-            txtCategory.TextChanged += txtCategory_TextChanged;
 
             lblTaskTime.DataBindings.Add(nameof(lblTaskTime.Text), _viewModel, nameof(_viewModel.SelectedTaskTime));
             progressBar1.DataBindings.Add(nameof(progressBar1.Visible), _viewModel, nameof(_viewModel.Loading));
-            //panelButtons.DataBindings.Add(nameof(panelButtons.Enabled), _viewModel, nameof(_viewModel.NotLoading));
 
-            //btnSave.DataBindings.Add(nameof(btnSave.Enabled), _viewModel, nameof(_viewModel.PendingChanges));
-            //btnEnd.DataBindings.Add(nameof(btnEnd.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
-            //btnBreak.DataBindings.Add(nameof(btnBreak.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
-            //btnLunch.DataBindings.Add(nameof(btnLunch.Enabled), _viewModel, nameof(_viewModel.ActiveModelOpen));
-
-            //btnArchive.Click += Archive_Event;
             tsmiManageArchive.Click += Archive_Event;
-
-            //btnBreak.Click += Break_Event;
             tsmiTaskBreak.Click += Break_Event;
-
-            //btnEnd.Click += End_Event;
             tsmiTaskEndDay.Click += End_Event;
-
-            //btnLunch.Click += Lunch_Event;
             tsmiTaskLunch.Click += Lunch_Event;
-
-            //btnReconcile.Click += Reconcile_Event;
             tsmiManageReconcile.Click += Reconcile_Event;
-
-            //btnRefresh.Click += Refresh_Event;
             tsmiDataRefresh.Click += Refresh_Event;
-
-            //btnRemoveEntry.Click += Remove_Event;
             tsmiManageDelete.Click += Remove_Event;
-
-            //btnSave.Click += Save_Event;
             tsmiDataSave.Click += Save_Event;
-
-            //btnStart.Click += Start_Event;
             tmsiTaskStart.Click += Start_Event;
 
-            _worker.DoWork += Worker_DoWork;
-            _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+            _viewModel.Question += ViewModel_Question;
         }
 
         private void Archive_Event(object sender, EventArgs e)
@@ -87,7 +59,7 @@ namespace GreenGoblin.WindowsForm
             var row = dgv.Rows[e.RowIndex];
             var model = row.DataBoundItem as TimeEntryModel;
 
-            bool modelUpdated = false;
+            bool modelUpdated;
             using (var form = new EditEntryForm(model))
             {
                 form.ShowDialog();
@@ -128,7 +100,7 @@ namespace GreenGoblin.WindowsForm
                 return;
             }
 
-            List<TimeEntryModel> selectedModels = new List<TimeEntryModel>();
+            var selectedModels = new List<TimeEntryModel>();
             foreach (var row in rows)
             {
                 DataGridViewRow dgvr = row as DataGridViewRow;
@@ -156,7 +128,8 @@ namespace GreenGoblin.WindowsForm
                 return;
             }
 
-            var dialogResult = MessageBox.Show(this, "There are pending changes. Would you like to save?", "Pending Changed", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var dialogResult = MessageBox.Show(this, "There are pending changes. Would you like to save?", "Pending Changed",
+                                               MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (dialogResult != DialogResult.Yes)
             {
@@ -168,7 +141,7 @@ namespace GreenGoblin.WindowsForm
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            StartLoading();
+            _viewModel.Load();
         }
 
         private void Reconcile_Event(object sender, EventArgs e)
@@ -178,21 +151,13 @@ namespace GreenGoblin.WindowsForm
 
         private void Refresh_Event(object sender, EventArgs e)
         {
-            if (_viewModel.PendingChanges)
-            {
-                var dialogResult = MessageBox.Show(this, "There are pending changes. Would you like to save?", "Pending Changed", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    _viewModel.Save();
-                }
-            }
-
-            StartLoading();
+            _viewModel.Load();
         }
 
         private void Remove_Event(object sender, EventArgs e)
         {
-            var dialogResult = MessageBox.Show(this, "Are you sure you want to remove the selected entries?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var dialogResult = MessageBox.Show(this, "Are you sure you want to remove the selected entries?", "Confirm Delete",
+                                               MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (dialogResult != DialogResult.Yes)
             {
@@ -212,40 +177,12 @@ namespace GreenGoblin.WindowsForm
             _viewModel.StartTask();
         }
 
-        private void StartLoading()
+        private void ViewModel_Question(object sender, QuestionEventArgs e)
         {
-            if (_viewModel.CheckBackupFile())
-            {
-                var dialogResult = MessageBox.Show(this, "A backup file exists. Would you like to load from the backup file?", "Load Backup File", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    _viewModel.LoadBackupFile = true;
-                }
-            }
-
-            _viewModel.StartLoading();
-            _worker.RunWorkerAsync();
-        }
-
-        private void txtCategory_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void txtDescription_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void Worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            _viewModel.Load();
-        }
-
-        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            _viewModel.FinishLoading();
+            var dialogResult = MessageBox.Show(this, e.Question, e.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            e.Answer = dialogResult == DialogResult.Yes;
         }
 
         private readonly GreenGoblinViewModel _viewModel;
-        private readonly BackgroundWorker _worker = new BackgroundWorker();
     }
 }

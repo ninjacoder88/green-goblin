@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using GreenGoblin.Repository;
@@ -15,19 +14,19 @@ namespace GreenGoblin.WindowsForm
         [STAThread]
         static void Main()
         {
-            bool result;
-            var mutex = new System.Threading.Mutex(true, "GreenGoblin", out result);
+            var mutex = new System.Threading.Mutex(true, "GreenGoblin", out bool alreadyRunning);
 
-            if (!result)
+            if (!alreadyRunning)
             {
-                MessageBox.Show("Another instance is already running.");
+                MessageBox.Show("Green Goblin is already running", "Green Goblin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
             var directory = ConfigurationManager.AppSettings["TimeFileLocation"];
             if (!Directory.Exists(directory))
             {
-                throw new Exception("Invalid Directory. Please verify directory in configuration exists");
+                MessageBox.Show("Invalid Directory. Please verify directory in configuration exists", "Green Goblin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
 
             IGreenGoblinRepository repository = new TestingRepository();

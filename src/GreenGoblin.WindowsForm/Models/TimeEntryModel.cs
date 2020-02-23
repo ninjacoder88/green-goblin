@@ -18,7 +18,7 @@ namespace GreenGoblin.WindowsForm
 
         public string Category
         {
-            get { return _category; }
+            get => _category;
             set
             {
                 _category = value;
@@ -28,7 +28,7 @@ namespace GreenGoblin.WindowsForm
 
         public string Description
         {
-            get { return _description; }
+            get => _description;
             set
             {
                 _description = value;
@@ -82,7 +82,7 @@ namespace GreenGoblin.WindowsForm
 
         public DateTime StartDateTime
         {
-            get { return _startDateTime; }
+            get => _startDateTime;
             set
             {
                 _startDateTime = value;
