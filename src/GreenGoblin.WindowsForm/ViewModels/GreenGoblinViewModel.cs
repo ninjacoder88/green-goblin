@@ -69,6 +69,7 @@ namespace GreenGoblin.WindowsForm
             {
                 _selectedCategory = value;
                 OnPropertyChanged(nameof(SelectedCategory));
+                TaskCategory = value.CategoryName;
             }
         }
 

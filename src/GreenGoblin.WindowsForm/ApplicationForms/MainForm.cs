@@ -36,6 +36,7 @@ namespace GreenGoblin.WindowsForm
             tsmiManageDelete.Click += Remove_Event;
             tsmiDataSave.Click += Save_Event;
             tmsiTaskStart.Click += Start_Event;
+            btnTaskStart.Click += Start_Event;
 
             _viewModel.Question += ViewModel_Question;
         }
@@ -44,7 +45,7 @@ namespace GreenGoblin.WindowsForm
         {
             var model = lbxCategories.SelectedItem as CategoryModel;
             _viewModel.SelectedCategory = model;
-            txtCategory.Text = model.CategoryName;
+            //txtCategory.Text = model.CategoryName;
         }
 
         private void Archive_Event(object sender, EventArgs e)

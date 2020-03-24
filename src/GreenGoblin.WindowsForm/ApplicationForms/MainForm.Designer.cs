@@ -63,6 +63,7 @@
             this.lblTaskTime = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnTaskStart = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTimeEntries)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeEntryModelBindingSource)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -358,6 +359,7 @@
             this.tableLayoutPanel1.Controls.Add(this.txtDescription, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lbxCategories, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.btnTaskStart, 2, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -366,6 +368,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1393, 652);
             this.tableLayoutPanel1.TabIndex = 18;
             // 
@@ -377,8 +381,20 @@
             this.panel1.Size = new System.Drawing.Size(121, 36);
             this.panel1.TabIndex = 18;
             // 
+            // btnTaskStart
+            // 
+            this.btnTaskStart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTaskStart.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTaskStart.Location = new System.Drawing.Point(1269, 630);
+            this.btnTaskStart.Name = "btnTaskStart";
+            this.btnTaskStart.Size = new System.Drawing.Size(121, 19);
+            this.btnTaskStart.TabIndex = 19;
+            this.btnTaskStart.Text = "Start Task";
+            this.btnTaskStart.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
+            this.AcceptButton = this.btnTaskStart;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkGreen;
@@ -440,6 +456,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.BindingSource categoryModelBindingSource;
+        private System.Windows.Forms.Button btnTaskStart;
     }
 }
 
