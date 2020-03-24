@@ -14,10 +14,19 @@ namespace GreenGoblin.WindowsForm
         [STAThread]
         static void Main()
         {
+            var mutex = new System.Threading.Mutex(true, "GreenGoblin", out bool alreadyRunning);
+
+            if (!alreadyRunning)
+            {
+                MessageBox.Show("Green Goblin is already running", "Green Goblin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
             var directory = ConfigurationManager.AppSettings["TimeFileLocation"];
             if (!Directory.Exists(directory))
             {
-                throw new Exception("Invalid Directory. Please verify directory in configuration exists");
+                MessageBox.Show("Invalid Directory. Please verify directory in configuration exists", "Green Goblin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
 
             IGreenGoblinRepository repository = new TestingRepository();
@@ -27,6 +36,8 @@ namespace GreenGoblin.WindowsForm
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm(viewModel));
+
+            GC.KeepAlive(mutex);
         }
     }
 }

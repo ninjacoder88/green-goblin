@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackupFileExistsEventArgs.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="ApplicationForms\EditEntryForm.cs">
       <SubType>Form</SubType>
@@ -53,6 +52,7 @@
     <Compile Include="ApplicationForms\EditEntryForm.Designer.cs">
       <DependentUpon>EditEntryForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="QuestionEventArgs.cs" />
     <Compile Include="ViewModels\GreenGoblinViewModel.cs" />
     <Compile Include="ApplicationForms\MainForm.cs">
       <SubType>Form</SubType>
@@ -88,6 +88,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Properties\DataSources\GreenGoblin.Repository.Models.CategoryModel.datasource" />
     <None Include="Properties\DataSources\TimeEntryModel.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

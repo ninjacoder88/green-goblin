@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Forms;
 using GreenGoblin.Repository;
+using GreenGoblin.Repository.Models;
 
 namespace GreenGoblin.WindowsForm
 {
@@ -11,12 +11,19 @@ namespace GreenGoblin.WindowsForm
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public event EventHandler<QuestionEventArgs> Question;
+
         public GreenGoblinViewModel(IGreenGoblinRepository repository)
         {
             _repository = repository;
+
+            _worker.DoWork += Worker_DoWork;
+            _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
         }
 
         public bool ActiveModelOpen => ActiveModel != null;
+
+        public BindingList<CategoryModel> Categories => _categories ?? (_categories = new BindingList<CategoryModel>());
 
         public bool LoadBackupFile { get; set; }
 
@@ -55,6 +62,19 @@ namespace GreenGoblin.WindowsForm
 
         public List<TimeEntryModel> SelectedTimeEntryModels => _selectedTimeEntryModels ?? (_selectedTimeEntryModels = new List<TimeEntryModel>());
 
+        public CategoryModel SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                _selectedCategory = value;
+                OnPropertyChanged(nameof(SelectedCategory));
+                TaskCategory = value.CategoryName;
+            }
+        }
+
+        private CategoryModel _selectedCategory;
+
         public string TaskCategory
         {
             get => _taskCategory;
@@ -89,18 +109,20 @@ namespace GreenGoblin.WindowsForm
 
         public void Archive(string fileName)
         {
-            var timeEntries = new List<TimeEntry>();
+            var timeEntries = new List<TaskModel>();
             foreach (var timeEntryModel in SelectedTimeEntryModels)
             {
-                timeEntries.Add(new TimeEntry(timeEntryModel.Id, timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
+                timeEntries.Add(new TaskModel
+                                    {
+                                        TaskId = timeEntryModel.Id,
+                                        StartDateTime = timeEntryModel.StartDateTime,
+                                        EndDateTime = timeEntryModel.EndDateTime,
+                                        Description = timeEntryModel.Description,
+                                        Category = timeEntryModel.Category
+                                    });
             }
 
             _repository.Archive(timeEntries, fileName);
-        }
-
-        public bool CheckBackupFile()
-        {
-            return _repository.CheckBackupFile();
         }
 
         public void EndOfDay()
@@ -111,33 +133,38 @@ namespace GreenGoblin.WindowsForm
             SaveBackup();
         }
 
-        public void FinishLoading()
-        {
-            Reset();
-
-            foreach (var timeEntry in _timeEntries)
-            {
-                var model = new TimeEntryModel(timeEntry.TimeEntryId, timeEntry.StartDateTime, timeEntry.EndDateTime ?? DateTime.MaxValue, timeEntry.Description,
-                                               timeEntry.Category);
-                TimeEntryModels.Add(model);
-            }
-
-            ActiveModel = TimeEntryModels.FirstOrDefault(x => x.EndDateTime.IsMaxDateTime());
-
-            PendingChanges = LoadBackupFile;
-            Loading = false;
-            LoadBackupFile = false;
-        }
-
         public void Load()
         {
-            if (LoadBackupFile)
+            if (PendingChanges)
             {
-                _timeEntries = _repository.LoadBackupTime().OrderByDescending(x => x.StartDateTime).ToList();
-                return;
+                var qea =
+                    new QuestionEventArgs
+                        {
+                            Question = "There are pending changes. Would you like to save?",
+                            Caption = "Pending Changes"
+                        };
+                OnQuestion(qea);
+                if (qea.Answer)
+                {
+                    Save();
+                }
             }
 
-            _timeEntries = _repository.LoadTime().OrderByDescending(x => x.StartDateTime).ToList();
+            if (_repository.CheckBackupFile())
+            {
+                var qea = new QuestionEventArgs
+                              {
+                                  Question = "A backup file exists. Would you like to load from the backup file?",
+                                  Caption = "Load Backup File"
+                              };
+                if (qea.Answer)
+                {
+                    LoadBackupFile = true;
+                }
+            }
+
+            Loading = true;
+            _worker.RunWorkerAsync();
         }
 
         public void ModelEdited(TimeEntryModel model)
@@ -174,10 +201,17 @@ namespace GreenGoblin.WindowsForm
 
         public void Save()
         {
-            var timeEntries = new List<TimeEntry>();
+            var timeEntries = new List<TaskModel>();
             foreach (var timeEntryModel in TimeEntryModels)
             {
-                timeEntries.Add(new TimeEntry(timeEntryModel.Id, timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
+                timeEntries.Add(new TaskModel
+                                    {
+                                        TaskId = timeEntryModel.Id,
+                                        StartDateTime = timeEntryModel.StartDateTime,
+                                        EndDateTime = timeEntryModel.EndDateTime,
+                                        Description = timeEntryModel.Description,
+                                        Category = timeEntryModel.Category
+                                    });
             }
 
             _repository.Save(timeEntries);
@@ -191,11 +225,6 @@ namespace GreenGoblin.WindowsForm
             TaskCategory = "Off the Clock";
             StartTask();
             SaveBackup();
-        }
-
-        public void StartLoading()
-        {
-            Loading = true;
         }
 
         public void StartLunch()
@@ -242,6 +271,7 @@ namespace GreenGoblin.WindowsForm
                     total = total.Add(DateTime.Now - timeEntryModel.StartDateTime);
                     continue;
                 }
+
                 total = total.Add(timeEntryModel.DurationTimeSpan);
             }
 
@@ -261,6 +291,11 @@ namespace GreenGoblin.WindowsForm
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        protected virtual void OnQuestion(QuestionEventArgs e)
+        {
+            Question?.Invoke(this, e);
+        }
+
         private void Reset()
         {
             TaskDescription = string.Empty;
@@ -273,10 +308,17 @@ namespace GreenGoblin.WindowsForm
 
         private void SaveBackup()
         {
-            var timeEntries = new List<TimeEntry>();
+            var timeEntries = new List<TaskModel>();
             foreach (var timeEntryModel in TimeEntryModels)
             {
-                timeEntries.Add(new TimeEntry(timeEntryModel.Id, timeEntryModel.StartDateTime, timeEntryModel.EndDateTime, timeEntryModel.Description, timeEntryModel.Category));
+                timeEntries.Add(new TaskModel
+                                    {
+                                        TaskId = timeEntryModel.Id,
+                                        StartDateTime = timeEntryModel.StartDateTime,
+                                        EndDateTime = timeEntryModel.EndDateTime,
+                                        Description = timeEntryModel.Description,
+                                        Category = timeEntryModel.Category
+                                    });
             }
 
             _repository.SaveBackup(timeEntries);
@@ -316,15 +358,55 @@ namespace GreenGoblin.WindowsForm
             }
         }
 
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            _categoryModels = _repository.LoadCategories().OrderBy(x => x.CategoryName).ToList();
+
+            if (LoadBackupFile)
+            {
+                _timeEntries = _repository.LoadBackupTime().OrderByDescending(x => x.StartDateTime).ToList();
+                return;
+            }
+
+            _timeEntries = _repository.LoadTime().OrderByDescending(x => x.StartDateTime).ToList();
+        }
+
+        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Reset();
+
+            foreach (var categoryModel in _categoryModels)
+            {
+                Categories.Add(categoryModel);
+            }
+
+            foreach (var timeEntry in _timeEntries)
+            {
+                var model = new TimeEntryModel(timeEntry.TaskId, timeEntry.StartDateTime, timeEntry.EndDateTime ?? DateTime.MaxValue, timeEntry.Description,
+                                               timeEntry.Category);
+                TimeEntryModels.Add(model);
+            }
+
+            ActiveModel = TimeEntryModels.FirstOrDefault(x => x.EndDateTime.IsMaxDateTime());
+
+            PendingChanges = LoadBackupFile;
+            Loading = false;
+            LoadBackupFile = false;
+        }
+
         private TimeEntryModel _activeModel;
+
+        private BindingList<CategoryModel> _categories;
+        private List<CategoryModel> _categoryModels = new List<CategoryModel>();
         private bool _loading;
         private bool _pendingChanges;
         private readonly IGreenGoblinRepository _repository;
         private string _selectedTaskTime;
         private List<TimeEntryModel> _selectedTimeEntryModels;
-        private string _taskDescription;
-        private List<TimeEntry> _timeEntries = new List<TimeEntry>();
-        private BindingList<TimeEntryModel> _timeEntryModel;
         private string _taskCategory;
+        private string _taskDescription;
+        private List<TaskModel> _timeEntries = new List<TaskModel>();
+        private BindingList<TimeEntryModel> _timeEntryModel;
+        private readonly BackgroundWorker _worker = new BackgroundWorker();
     }
 }
